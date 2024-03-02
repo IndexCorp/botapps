@@ -7,34 +7,34 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-
     <title>Gram Apps</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-  <div class="preloader"></div>
+    <div class="preloader" id="preloader"></div>
     <main>
-      <ul class="tabs">
-        <li class="tab active" onclick="changeTab(0)">Tab 1</li>
-        <li class="tab" onclick="changeTab(1)">Tab 2</li>
-        <li class="tab" onclick="changeTab(2)">Tab 3</li>
-    </ul>
-    <div class="tab-content active" id="tab-content-1">
-        <h2>Tab 1 Content</h2>
-        <p>This is the content of Tab 1.</p>
-    </div>
-    <div class="tab-content" id="tab-content-2">
-        <h2>Tab 2 Content</h2>
-        <p>This is the content of Tab 2.</p>
-    </div>
-    <div class="tab-content" id="tab-content-3">
-        <h2>Tab 3 Content</h2>
-        <p>This is the content of Tab 3.</p>
-    </div>
+        <ul class="tabs">
+            <li class="tab active" onclick="changeTab(0)">Tab 1</li>
+            <li class="tab" onclick="changeTab(1)">Tab 2</li>
+            <li class="tab" onclick="changeTab(2)">Tab 3</li>
+        </ul>
+        <div class="tab-content active" id="tab-content-1">
+            <h2>Tab 1 Content</h2>
+            <p>This is the content of Tab 1.</p>
+        </div>
+        <div class="tab-content" id="tab-content-2">
+            <h2>Tab 2 Content</h2>
+            <p>This is the content of Tab 2.</p>
+        </div>
+        <div class="tab-content" id="tab-content-3">
+            <h2>Tab 3 Content</h2>
+            <p>This is the content of Tab 3.</p>
+        </div>
     </main>
+
     <div id="viewport"></div>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Подключение jQuery -->
 </body>
 </html>

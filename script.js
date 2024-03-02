@@ -1,6 +1,6 @@
 $(document).ready(function() {
   // Устанавливаем время задержки в миллисекундах (например, 3000 миллисекунд = 3 секунды)
-  var delayInMilliseconds = 3000;
+  var delayInMilliseconds = 10000;
 
   // Показываем прелоадер
   $('.preloader').show();
@@ -12,13 +12,12 @@ $(document).ready(function() {
   }, delayInMilliseconds);
 });
 
-
 // Init TWA
 Telegram.WebApp.ready();
 
 // Event occurs whenever theme settings are changed in the user's Telegram app (including switching to night mode).
 Telegram.WebApp.onEvent('themeChanged', function() {
-    document.documentElement.className = Telegram.WebApp.colorScheme;
+  document.documentElement.className = Telegram.WebApp.colorScheme;
 });
 
 Telegram.WebApp.setHeaderColor('secondary_bg_color');
@@ -27,7 +26,7 @@ setViewportData();
 Telegram.WebApp.onEvent('viewportChanged', setViewportData);
 
 Telegram.WebApp.onEvent('themeChanged', function() {
-    document.body.setAttribute('style', '--bg-color:' + Telegram.WebApp.backgroundColor);
+  document.body.setAttribute('style', '--bg-color:' + Telegram.WebApp.backgroundColor);
 });
 
 // Function to change active tab and display corresponding content
