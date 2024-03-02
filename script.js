@@ -1,3 +1,18 @@
+$(document).ready(function() {
+  // Устанавливаем время задержки в миллисекундах (например, 3000 миллисекунд = 3 секунды)
+  var delayInMilliseconds = 3000;
+
+  // Показываем прелоадер
+  $('.preloader').show();
+
+  // Запускаем таймер
+  setTimeout(function() {
+      // Скрываем прелоадер после истечения времени задержки
+      $('.preloader').fadeOut('slow');
+  }, delayInMilliseconds);
+});
+
+
 // Init TWA
 Telegram.WebApp.ready();
 
