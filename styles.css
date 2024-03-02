@@ -30,7 +30,6 @@ a {
   bottom: 0;
   border-width: 4px;
   border-style: solid;
-  border-image: linear-gradient(45deg, rgba(64, 224, 208, .5), rgba(173, 255, 47, .5)) 1;
 }
 
 #viewport-params-size,
