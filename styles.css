@@ -48,13 +48,8 @@ padding-top: 0.5rem;
 padding-bottom: 0.5rem;
 cursor: pointer;
 transition: color .15s ease-in-out, border-color .15s ease-in-out;
-color: #0d6efd;
 background: 0 0;
 border-bottom: 0.125rem solid transparent;
-}
-
-.tab > label:hover {
-border-bottom-color: #0d6efd;
 }
 
 .tab > input[type="radio"]:checked + label {
