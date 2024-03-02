@@ -1,8 +1,17 @@
 :root {
   --tg-theme-bg-color: #f0f0f0;
   --tg-theme-text-color: #000000;
-  --tg-theme-button-color: #4CAF50;
+  --tg-theme-hint-color: #999999;
+  --tg-theme-link-color: #007bff;
+  --tg-theme-button-color: #007bff;
   --tg-theme-button-text-color: #ffffff;
+  --tg-theme-secondary-bg-color: #f0f0f0;
+  --tg-theme-header-bg-color: #007bff;
+  --tg-theme-accent-text-color: #ff0000;
+  --tg-theme-section-bg-color: #ffffff;
+  --tg-theme-section-header-text-color: #000000;
+  --tg-theme-subtitle-text-color: #666666;
+  --tg-theme-destructive-text-color: #ff0000;
 }
 
 body {
@@ -15,7 +24,7 @@ body {
 .container {
   max-width: 600px;
   margin: 20px auto;
-  background-color: #fff; /* Не используется переменная для фона контейнера */
+  background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   position: relative;
@@ -42,7 +51,6 @@ body {
   display: block;
 }
 
-/* Фиксирование вкладок */
 .tab-wrapper {
   position: fixed;
   width: 100%;

@@ -2,19 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gram Apps</title>
-<base href="/">
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мой сайт с вкладками</title>
 <link rel="stylesheet" href="styles.css">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
 
 <div class="container">
-  <button class="tab-btn" onclick="openTab('tab1')">Вкладка 1</button>
-  <button class="tab-btn" onclick="openTab('tab2')">Вкладка 2</button>
-  <button class="tab-btn" onclick="openTab('tab3')">Вкладка 3</button>
+  <div class="tab-wrapper">
+    <button class="tab-btn" onclick="openTab('tab1')">Вкладка 1</button>
+    <button class="tab-btn" onclick="openTab('tab2')">Вкладка 2</button>
+    <button class="tab-btn" onclick="openTab('tab3')">Вкладка 3</button>
+  </div>
 
   <div id="tab1" class="tab-content active">
     <h2>Содержимое вкладки 1</h2>
