@@ -1,85 +1,38 @@
-.back {
-  width: 600px;
-  height: 360px;
-  background: #ccc;
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
-.abs {
-  position: absolute;
+
+.tab-wrapper {
+  padding: 20px;
 }
-.block {
-  top: 26px;
-  left: 50px;
-  right: 40px;
-  bottom: 20px;
+
+input[type="radio"] {
   display: none;
 }
-ul.circle {
-  list-style-type:none;
-  top: 284px;
-  left: 98px;
+
+label {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #ddd;
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  margin-right: 5px;
 }
-ul {
-  list-style-type:none;
-  top: 273px;
-  left: 114px;
-}
-li {
-  font-size: 24px;
-  display: inline;
-  padding-right: 36px;
-}
-ul.circle li {
-  border-radius: 30px;
-  background-color: #fff;
-  border: 2px solid #222;
-  font-size: 28px;
-  padding-right: 56px;
-  padding-top: 24px;
-  margin-right: 10px;
-  display: inline;
-}
-a {
-  text-decoration: none;
-  color: #222;
-  margin-right: 20px;
-}
-a:hover {
-  color: #000;
-}
-a:visited {
-  font-weight: bold;
-}
-.tabs {
-  background: #ededed;
-  font-family: monostace;
-  top: 58px;
-  width: 520px;
-  height: 270px;
-}
-.tabs p {
-  top: 16px;
-  font-family: monostace;
-}
-p {
-  font-size: 44px;
-  font-family: monostace;
-  top: 48px;
-  left: 70px;
-  color: #aaa;
-  line-height: 44px;
-}
-#one {
-  display: block;
-}
-div:target {
-  display: block;
-}
-div[id*=tab]:target {
-  display: block;
-}
-div[id*=tab]:target ~ #tab {
-  display: block;
-}
-div[id*=t]:target ~ #one {
+
+.tab-content {
   display: none;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+input[type="radio"]:checked ~ label {
+  background-color: #4CAF50;
+  color: white;
+}
+
+input[type="radio"]:checked ~ .tab-content {
+  display: block;
 }

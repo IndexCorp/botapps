@@ -3,75 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Мой сайт с вкладками</title>
+<title>Мобильные вкладки</title>
 <link rel="stylesheet" href="styles.css">
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-  <div class="back">
 
-    <div id="tab/three" class="abs tabs block">
-      <p class="abs">
-        &lt;div <span style="color: #444">id="tab/three"</span>&gt;
-        <br />...
-        <br />&lt;/div&gt;
-      </p>
-    </div>
-    
-    <div id="tab/two" class="abs tabs block">
-      <p class="abs">
-        &lt;div <span style="color: #444">id="tab/two"</span>&gt;
-        <br />...
-        <br />&lt;/div&gt;
-      </p></div>
-    
-    <div id="tab/one" class="abs tabs block">
-      <p class="abs">
-        &lt;div <span style="color: #444">id="tab/one"</span>&gt;
-        <br />...
-        <br />&lt;/div&gt;
-      </p></div>
-  
-    <div id="tab" class="abs block">
-      <a href="#one">#one</a>
-      <a href="#two">#two</a>
-      <b><a href="#tab/one">#tab</a></b>
-      
-      <p class="abs" style="font-size: 24px; top: 32px; left: 34px; color: #ccc">
-        &lt;div id="tab"&gt;
-      </p>
-      <p class="abs" style="font-size: 24px; top: 200px; left: 34px; color: #ccc">
-        &lt;div id="tab"&gt;
-      </p>
-      
-      <ul class="circle abs">
-       <a href="#tab/one"><li></li></a><a href="#tab/two"><li></li></a><a href="#tab/three"><li></li></a></ul>
-      <ul class="abs"><a href="#tab/one"><li>3.1</li></a><a href="#tab/two"><li>3.2</li></a><a href="#tab/three"><li>3.3</li></a></ul>
-    </div>
-  
-    <div id="two" class="abs block">
-      <a href="#one">#one</a>
-      <b><a href="#two">#two</a></b>
-      <a href="#tab/one">#tab</a>
-      
-      <p class="abs">
-        &lt;div <span style="color: #fff">id="two"</span>&gt;
-        <br />...
-        <br />&lt;/div&gt;
-      </p>
-    </div>
-  
-    <div id="one" class="abs block">
-      <b><a href="#one">#one</a></b>
-      <a href="#two">#two</a>
-      <a href="#tab/one">#tab</a>
-      <p class="abs">
-        &lt;div <span style="color: #fff">id="one"</span>&gt;
-        <br />...
-        <br />&lt;/div&gt;
-      </p>
-    </div>
-  
+<div class="tab-wrapper">
+  <input type="radio" id="tab1" name="tab" checked>
+  <label for="tab1">Вкладка 1</label>
+
+  <input type="radio" id="tab2" name="tab">
+  <label for="tab2">Вкладка 2</label>
+
+  <input type="radio" id="tab3" name="tab">
+  <label for="tab3">Вкладка 3</label>
+
+  <div id="tab-content1" class="tab-content">
+    <h2>Содержимое вкладки 1</h2>
+    <p>Это содержимое первой вкладки.</p>
   </div>
+
+  <div id="tab-content2" class="tab-content">
+    <h2>Содержимое вкладки 2</h2>
+    <p>Это содержимое второй вкладки.</p>
+  </div>
+
+  <div id="tab-content3" class="tab-content">
+    <h2>Содержимое вкладки 3</h2>
+    <p>Это содержимое третьей вкладки.</p>
+  </div>
+</div>
+
 </body>
 </html>
