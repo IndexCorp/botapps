@@ -1,38 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Мобильные вкладки</title>
-<link rel="stylesheet" href="styles.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Telegram Mini Apps Vanilla JS Sample App</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
+    <main>
+        <div align="center">
+            <a href="https://ton.org/"><img width="48" src="./assets/tapps.png" alt="logo of telegram web apps"></a>
+        </div>
+        <h1>Modals</h1>
+        <button onclick="Telegram.WebApp.showAlert('Hello World!');">Launch Alert</button>
+        <button onclick="showPopup();">Launch Popup</button>
 
-<div class="tab-wrapper">
-  <input type="radio" id="tab1" name="tab" checked>
-  <label for="tab1">Вкладка 1</label>
+        <h1>Links</h1>
+        <ul>
+            <li>
+                <a href="javascript:Telegram.WebApp.openTelegramLink('https://t.me/trendingapps');">Open link within Telegram</a>
+            </li>
+            <li>
+                <a href="javascript:Telegram.WebApp.openLink('https://ton.org/');">Open link in external browser</a>
+            </li>
+            <li>
+                <a href="javascript:Telegram.WebApp.openLink('https://telegra.ph/api',{try_instant_view:true});">Open link inside Telegram webview</a>
+            </li>
+        </ul>
 
-  <input type="radio" id="tab2" name="tab">
-  <label for="tab2">Вкладка 2</label>
+        <h1>Buttons</h1>
+        <button onclick="Telegram.WebApp.expand();">Expand Webview</button>
+        <button onclick="toggleMainButton();">Toggle Main Button</button>
+    </main>
+    <div id="viewport"></div>
+    <div id="viewport-params-size"></div>
+    <div id="viewport-params-expand"></div>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="script.js"></script>
 
-  <input type="radio" id="tab3" name="tab">
-  <label for="tab3">Вкладка 3</label>
-
-  <div id="tab-content1" class="tab-content">
-    <h2>Содержимое вкладки 1</h2>
-    <p>Это содержимое первой вкладки.</p>
-  </div>
-
-  <div id="tab-content2" class="tab-content">
-    <h2>Содержимое вкладки 2</h2>
-    <p>Это содержимое второй вкладки.</p>
-  </div>
-
-  <div id="tab-content3" class="tab-content">
-    <h2>Содержимое вкладки 3</h2>
-    <p>Это содержимое третьей вкладки.</p>
-  </div>
-</div>
-
+    <!-- Eruda is console for mobile browsers -->
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
 </body>
 </html>
