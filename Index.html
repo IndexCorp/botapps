@@ -12,16 +12,33 @@
         canvas {
             display: block;
         }
+        #startButton {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px 40px;
+            font-size: 18px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas"></canvas>
+    <button id="startButton">Начать игру</button>
+
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+
+        const startButton = document.getElementById("startButton");
 
         // Космолет
         const spaceship = {
@@ -47,10 +64,12 @@
         }
 
         // Управление через движение устройства
-        window.addEventListener("deviceorientation", (event) => {
-            const tiltX = event.gamma; // Наклон по горизонтали
-            spaceship.speedX = tiltX / 10; // Устанавливаем скорость
-        });
+        function setupDeviceMotion() {
+            window.addEventListener("deviceorientation", (event) => {
+                const tiltX = event.gamma || 0; // Наклон по горизонтали
+                spaceship.speedX = tiltX / 10; // Устанавливаем скорость
+            });
+        }
 
         // Основной игровой цикл
         function update() {
@@ -115,7 +134,24 @@
         }
 
         // Запуск игры
-        update();
+        startButton.addEventListener("click", () => {
+            if (typeof DeviceOrientationEvent.requestPermission === "function") {
+                DeviceOrientationEvent.requestPermission()
+                    .then((response) => {
+                        if (response === "granted") {
+                            setupDeviceMotion();
+                        } else {
+                            alert("Доступ к датчикам отклонён.");
+                        }
+                    })
+                    .catch(() => alert("Ваш браузер не поддерживает DeviceOrientation API."));
+            } else {
+                setupDeviceMotion(); // Для браузеров, которые не требуют разрешения
+            }
+
+            startButton.style.display = "none";
+            update();
+        });
 
         // Стрельба
         window.addEventListener("click", shootBullet);
