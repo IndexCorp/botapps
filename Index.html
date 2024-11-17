@@ -23,7 +23,7 @@
     <script>
         const tg = window.Telegram.WebApp;
 
-        // Настройка кнопки SettingsButton
+        // Инициализация кнопки SettingsButton
         tg.SettingsButton.setParams({
             text: "Полный экран"
         });
@@ -45,6 +45,16 @@
 
         // Показать кнопку SettingsButton
         tg.SettingsButton.show();
+
+        // Функция для получения стабильной высоты области просмотра
+        function getViewportStableHeight() {
+            const stableHeight = tg.viewportStableHeight;
+            console.log("Стабильная высота области просмотра:", stableHeight);
+        }
+
+        // Вызов функции для отображения стабильной высоты области просмотра
+        window.addEventListener('resize', getViewportStableHeight);
+        getViewportStableHeight(); // Инициализация при загрузке страницы
     </script>
 </body>
 </html>
