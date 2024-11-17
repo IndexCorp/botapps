@@ -52,6 +52,19 @@
             height: 30px;
             margin-right: 10px;
         }
+
+        #fullscreenButton {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
@@ -60,6 +73,9 @@
         <img src="score-icon.png" alt="Score Icon">
         <span id="scoreText">0</span>
     </div>
+
+    <!-- Кнопка полноэкранного режима -->
+    <button id="fullscreenButton">Полный экран</button>
 
     <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
 
@@ -251,6 +267,33 @@
         canvas.addEventListener("click", function(event) {
             shootBullet();
         });
+
+        // Функция для переключения в полноэкранный режим
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+                    document.documentElement.mozRequestFullScreen();
+                } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                    document.documentElement.webkitRequestFullscreen();
+                } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+                    document.documentElement.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) { // Firefox
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { // IE/Edge
+                    document.msExitFullscreen();
+                }
+            }
+        }
+
+        document.getElementById("fullscreenButton").addEventListener("click", toggleFullScreen);
     </script>
 </body>
 </html>
