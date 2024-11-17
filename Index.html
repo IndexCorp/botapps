@@ -16,41 +16,35 @@
             align-items: center;
             height: 100vh;
         }
-
-        #fullscreenButton {
-            padding: 15px 30px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 18px;
-        }
     </style>
 </head>
 <body>
-    <button id="fullscreenButton">Включить полноэкранный режим</button>
-
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         const tg = window.Telegram.WebApp;
-        const fullscreenButton = document.getElementById("fullscreenButton");
 
-        let isFullscreen = false;
-
-        fullscreenButton.addEventListener("click", () => {
-            if (isFullscreen) {
-                tg.exitFullscreen(); // Выход из полноэкранного режима
-                fullscreenButton.textContent = "Включить полноэкранный режим";
-            } else {
-                tg.requestFullscreen(); // Вход в полноэкранный режим
-                fullscreenButton.textContent = "Выйти из полноэкранного режима";
-            }
-            isFullscreen = !isFullscreen; // Переключаем состояние
+        // Настройка кнопки SettingsButton
+        tg.SettingsButton.setParams({
+            text: "Полный экран"
         });
 
-        // Проверяем состояние полноэкранного режима при загрузке страницы
-        tg.isExpanded ? tg.requestFullscreen() : tg.exitFullscreen();
+        // Обработчик нажатия на кнопку SettingsButton
+        tg.SettingsButton.onClick(() => {
+            if (tg.isFullscreen) {
+                tg.exitFullscreen(); // Выход из полноэкранного режима
+                tg.SettingsButton.setParams({
+                    text: "Включить полноэкранный режим"
+                });
+            } else {
+                tg.requestFullscreen(); // Вход в полноэкранный режим
+                tg.SettingsButton.setParams({
+                    text: "Выйти из полноэкранного режима"
+                });
+            }
+        });
+
+        // Показать кнопку SettingsButton
+        tg.SettingsButton.show();
     </script>
 </body>
 </html>
