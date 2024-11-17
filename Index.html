@@ -76,29 +76,27 @@
         // Показать кнопку Telegram
         tg.MainButton.show();
 
-        // Создаем кнопку для переключения полноэкранного режима
-        tg.SettingsButton.setParams({
-        text: "Переключить полноэкранный режим",
-        color: "#007BFF"
-        });
-
-        tg.SettingsButton.show();
-
-        // Обработчик нажатия на кнопку
-        tg.SettingsButton.onClick(() => {
-        if (tg.isFullscreen) {
-        tg.exitFullscreen(); // Выключаем полноэкранный режим
-        console.log("Выключен полноэкранный режим.");
-        } else {
-        tg.requestFullscreen(); // Включаем полноэкранный режим
-        console.log("Включен полноэкранный режим.");
-        }
-        });
-
         // Действие при нажатии на кнопку Telegram
         tg.MainButton.onClick(() => {
             startGame();
         });
+
+        // Добавляем кнопку в меню настроек
+tg.expand(); // Расширяем Web App, чтобы кнопка была видна
+
+tg.onEvent("settingsButtonClicked", () => {
+    // Проверяем текущий режим
+    if (tg.isFullscreen) {
+        tg.exitFullscreen(); // Выключаем полноэкранный режим
+        alert("Полноэкранный режим выключен.");
+    } else {
+        tg.requestFullscreen(); // Включаем полноэкранный режим
+        alert("Полноэкранный режим включен.");
+    }
+});
+
+// Активируем кнопку настроек
+tg.showSettingsButton();
 
         // Установка размеров канваса
         const canvas = document.getElementById("gameCanvas");
