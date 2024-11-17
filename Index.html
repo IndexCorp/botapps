@@ -35,7 +35,7 @@
 
 <div id="app">
     <div class="content">
-        Контент приложения 1
+        Контент приложения 2
     </div>
 </div>
 
@@ -46,38 +46,41 @@
     const tg = window.Telegram.WebApp;
 
     // Растягиваем на весь экран при открытии
-        window.onload = () => {
-            tg.expand();  // Метод для автоматического растягивания
-        };
+    window.onload = () => {
+        tg.expand();  // Метод для автоматического растягивания
+    };
 
     // Инициализация Telegram Web App
-        tg.MainButton.setParams({
-            text: "Начать игру",
-            color: "#007BFF"
-        });
+    tg.MainButton.setParams({
+        text: "Начать игру",
+        color: "#007BFF"
+    });
 
     // Показать кнопку Telegram
-        tg.MainButton.show();
-// Действие при нажатии на кнопку Telegram
-        tg.MainButton.onClick(() => {
-            startGame();
-        });
+    tg.MainButton.show();
+
+    // Действие при нажатии на кнопку Telegram
+    tg.MainButton.onClick(() => {
+        startGame();
+        tg.MainButton.hide();  // Скрыть кнопку после нажатия
+    });
 
     // Создаем кнопку для переключения полноэкранного режима
-tg.MainButton.setParams({
-    text: "Переключить полноэкранный режим",
-    color: "#007BFF"
-});
+    tg.MainButton.setParams({
+        text: "Переключить полноэкранный режим",
+        color: "#007BFF"
+    });
 
     tg.MainButton.onClick(() => {
-    if (tg.isFullscreen) {
-        tg.exitFullscreen(); // Выключаем полноэкранный режим
-        console.log("Выключен полноэкранный режим.");
-    } else {
-        tg.requestFullscreen(); // Включаем полноэкранный режим
-        console.log("Включен полноэкранный режим.");
-    }
-});
+        if (tg.isFullscreen) {
+            tg.exitFullscreen(); // Выключаем полноэкранный режим
+            console.log("Выключен полноэкранный режим.");
+        } else {
+            tg.requestFullscreen(); // Включаем полноэкранный режим
+            console.log("Включен полноэкранный режим.");
+        }
+        tg.MainButton.hide();  // Скрыть кнопку после нажатия
+    });
     
 </script>
 
