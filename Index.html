@@ -52,19 +52,6 @@
             height: 30px;
             margin-right: 10px;
         }
-
-        #fullscreenButton {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 10px;
-            background: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            z-index: 10;
-        }
     </style>
 </head>
 <body>
@@ -73,13 +60,13 @@
         <img src="score-icon.png" alt="Score Icon">
         <span id="scoreText">0</span>
     </div>
-    
+
     <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
 
     <script>
         const tg = window.Telegram.WebApp;
 
-        // Инициализация кнопки Telegram
+        // Инициализация Telegram Web App
         tg.MainButton.setParams({
             text: "Начать игру",
             color: "#007BFF"
@@ -255,22 +242,6 @@
             createStars();
             update();
         }
-
-        // Функция для перехода в полноэкранный режим
-        function toggleFullscreen() {
-            if (!tg.WebApp.IsFullScreen) {
-                tg.WebApp.requestFullscreen();
-            } else {
-                tg.WebApp.exitFullscreen();
-            }
-        }
-
-        // Создаем кнопку для полноэкранного режима
-        const fullscreenButton = document.createElement("button");
-        fullscreenButton.id = "fullscreenButton";
-        fullscreenButton.textContent = "Полный экран";
-        fullscreenButton.onclick = toggleFullscreen;
-        document.body.appendChild(fullscreenButton);
 
         canvas.addEventListener("touchstart", function(event) {
             event.preventDefault();
