@@ -185,3 +185,18 @@ canvas.addEventListener("touchstart", function(event) {
 canvas.addEventListener("click", function(event) {
     shootBullet();
 });
+
+// Кнопка полноэкранного режима
+const fullscreenButton = document.getElementById("fullscreenButton");
+fullscreenButton.addEventListener("click", () => {
+    tg.WebApp.requestFullscreen(); // Запрос на полноэкранный режим
+});
+
+// Опционально, можно скрыть кнопку, если мы в полноэкранном режиме
+tg.WebApp.onEvent('fullscreen', () => {
+    fullscreenButton.style.display = 'none';  // Скрыть кнопку, если в полноэкранном режиме
+});
+
+tg.WebApp.onEvent('exitFullscreen', () => {
+    fullscreenButton.style.display = 'block'; // Показать кнопку, если не в полноэкранном режиме
+});
