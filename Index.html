@@ -26,9 +26,6 @@
             border-radius: 10px;
             cursor: pointer;
         }
-        .pixel {
-            image-rendering: pixelated; /* Для пиксельного рендеринга */
-        }
     </style>
 </head>
 <body>
@@ -44,13 +41,19 @@
 
         const startButton = document.getElementById("startButton");
 
+        // Загружаем изображения
+        const spaceshipImg = new Image();
+        spaceshipImg.src = "spaceship.png"; // Ваше изображение космолета
+
+        const meteorImg = new Image();
+        meteorImg.src = "meteor.png"; // Ваше изображение метеорита
+
         // Космолет
         const spaceship = {
             x: canvas.width / 2,
             y: canvas.height - 100,
-            width: 30,
-            height: 30,
-            color: "#00BFFF", // Синий цвет
+            width: 50, // Размер космолета (можно подогнать под ваше изображение)
+            height: 50, // Размер космолета (можно подогнать под ваше изображение)
             speedX: 0
         };
 
@@ -58,7 +61,7 @@
         const comets = [];
         function createComet() {
             const x = Math.random() * canvas.width;
-            comets.push({ x, y: 0, radius: 10, speed: 2 + Math.random() * 3 });
+            comets.push({ x, y: 0, radius: 20, speed: 2 + Math.random() * 3 });
         }
 
         // Снаряды
@@ -85,21 +88,16 @@
             if (spaceship.x > canvas.width - spaceship.width) spaceship.x = canvas.width - spaceship.width;
 
             // Отрисовка космолета (пиксельный синий квадрат)
-            ctx.fillStyle = spaceship.color;
-            ctx.fillRect(spaceship.x, spaceship.y, spaceship.width, spaceship.height);
+            ctx.drawImage(spaceshipImg, spaceship.x, spaceship.y, spaceship.width, spaceship.height);
 
-            // Отрисовка метеоритов (пиксельные красные круги)
+            // Отрисовка метеоритов
             for (let i = comets.length - 1; i >= 0; i--) {
                 const comet = comets[i];
                 comet.y += comet.speed;
                 if (comet.y > canvas.height) {
                     comets.splice(i, 1); // Удаляем метеориты за пределами экрана
                 } else {
-                    ctx.beginPath();
-                    ctx.arc(comet.x, comet.y, comet.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = "red";
-                    ctx.fill();
-                    ctx.closePath();
+                    ctx.drawImage(meteorImg, comet.x, comet.y, comet.radius * 2, comet.radius * 2); // Рисуем метеорит
                 }
             }
 
