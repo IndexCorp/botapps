@@ -89,6 +89,15 @@
 
         // Привязываем обработчик события к кнопке
         document.getElementById("fullscreenButton").addEventListener("click", toggleFullscreen);
+
+        // Настройка кнопки "Настройки" в верхнем правом углу
+        tgApp.webAppSetupSettingsButton();
+
+        // Обработчик события нажатия на кнопку "Настройки"
+        tgApp.onEvent('settings_button_pressed', function() {
+            alert('Кнопка настроек была нажата');
+            // Здесь можно добавить ваш код для обработки нажатия
+        });
     }
 </script>
 
