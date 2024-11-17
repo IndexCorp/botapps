@@ -3,33 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini App Telegram</title>
+    <title>Космолет</title>
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-            font-family: Arial, sans-serif;
-        }
-
-        #app {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            justify-content: space-between;
-        }
-
-        .content {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 18px;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
-
         @font-face {
             font-family: 'Monocraft';
             src: url('Monocraft.otf') format('opentype');
@@ -59,7 +34,7 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            z-index: 10;
+            z-index: 10; /* Добавлен z-index, чтобы кнопка была поверх других элементов */
         }
 
         #score {
@@ -73,228 +48,223 @@
         }
 
         #score img {
-            width: 30px;
+            width: 30px; /* Размер изображения, соответствующий шрифту */
             height: 30px;
-            margin-right: 10px;
+            margin-right: 10px; /* Отступ между изображением и текстом */
         }
     </style>
 </head>
 <body>
-<div id="app">
-    <div class="content">
-        Контент приложения 1
+    <canvas id="gameCanvas"></canvas>
+    <button id="startButton">Начать игру</button>
+    <div id="score">
+        <img src="score-icon.png" alt="Score Icon">
+        <span id="scoreText">0</span>
     </div>
-</div>
 
-<canvas id="gameCanvas"></canvas>
-<button id="startButton">Начать игру</button>
-<div id="score">
-    <img src="score-icon.png" alt="Score Icon">
-    <span id="scoreText">0</span>
-</div>
+    <!-- Подключаем Telegram Web App API -->
+    <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
 
-<!-- Подключаем Telegram Web App API -->
-<script src="https://telegram.org/js/telegram-web-app.js?56"></script>
+    <script>
+        const tg = window.Telegram.WebApp;
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
 
-<script>
-    const tg = window.Telegram.WebApp;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-    // Растягиваем на весь экран при открытии
-    window.onload = () => {
-        tg.expand();  // Метод для автоматического растягивания
-    };
+        const startButton = document.getElementById("startButton");
+        const scoreText = document.getElementById("scoreText");
 
-    // Инициализация Telegram Web App
-    tg.MainButton.setParams({
-        text: "Начать игру",
-        color: "#007BFF"
-    });
+        // Загружаем изображения
+        const spaceshipImg = new Image();
+        spaceshipImg.src = "spaceship.png"; // Пиксельный космолет
 
-    // Показать кнопку Telegram
-    tg.MainButton.show();
+        const meteorImg = new Image();
+        meteorImg.src = "meteor.png"; // Пиксельный метеорит
 
-    // Действие при нажатии на кнопку Telegram
-    tg.MainButton.onClick(() => {
-        startGame();
-        tg.MainButton.hide();  // Скрыть кнопку после нажатия
-    });
+        const scoreIcon = new Image();
+        scoreIcon.src = "score-icon.png"; // Иконка перед счетом
 
-    // Создаем кнопку для переключения полноэкранного режима
-    tg.MainButton.setParams({
-        text: "Переключить полноэкранный режим",
-        color: "#007BFF"
-    });
+        // Космолет
+        const spaceship = {
+            x: canvas.width / 2,
+            y: canvas.height - 100,
+            width: 50, // Размер космолета
+            height: 50,
+            speedX: 0
+        };
 
-    tg.MainButton.onClick(() => {
-        if (tg.isFullscreen) {
-            tg.exitFullscreen(); // Выключаем полноэкранный режим
-            console.log("Выключен полноэкранный режим.");
-        } else {
-            tg.requestFullscreen(); // Включаем полноэкранный режим
-            console.log("Включен полноэкранный режим.");
-        }
-        tg.MainButton.hide();  // Скрыть кнопку после нажатия
-    });
-
-    // Игра с космолетом
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const startButton = document.getElementById("startButton");
-    const scoreText = document.getElementById("scoreText");
-
-    // Загружаем изображения
-    const spaceshipImg = new Image();
-    spaceshipImg.src = "spaceship.png"; // Пиксельный космолет
-
-    const meteorImg = new Image();
-    meteorImg.src = "meteor.png"; // Пиксельный метеорит
-
-    const scoreIcon = new Image();
-    scoreIcon.src = "score-icon.png"; // Иконка перед счетом
-
-    // Космолет
-    const spaceship = {
-        x: canvas.width / 2,
-        y: canvas.height - 100,
-        width: 50,
-        height: 50,
-        speedX: 0
-    };
-
-    // Метеориты
-    const comets = [];
-    function createComet() {
-        const x = Math.random() * canvas.width;
-        comets.push({ x, y: 0, radius: 20, speed: 2 + Math.random() * 3 });
-    }
-
-    // Снаряды
-    const bullets = [];
-    function shootBullet() {
-        bullets.push({ x: spaceship.x + spaceship.width / 2, y: spaceship.y, radius: 3, speed: 5 });
-    }
-
-    // Управление через движение устройства
-    function setupDeviceMotion() {
-        window.addEventListener("deviceorientation", (event) => {
-            const tiltX = event.gamma || 0; // Наклон по горизонтали
-            spaceship.speedX = tiltX / 10; // Устанавливаем скорость
-        });
-    }
-
-    // Фон - эффект падающих звезд
-    let stars = [];
-    function createStars() {
-        const numberOfStars = 80;
-
-        for (let i = 0; i < numberOfStars; i++) {
-            const size = Math.random() * 3 + 1;
+        // Метеориты
+        const comets = [];
+        function createComet() {
             const x = Math.random() * canvas.width;
-            const y = Math.random() * canvas.height;
-            const speed = Math.random() * 0.5 + 0.5;
-
-            stars.push({ x, y, size, speed });
+            comets.push({ x, y: 0, radius: 20, speed: 2 + Math.random() * 3 });
         }
-    }
 
-    // Обновление звезд
-    function updateStars() {
-        stars.forEach(star => {
-            star.y += star.speed;
-            if (star.y > canvas.height) {
-                star.y = 0;
-                star.x = Math.random() * canvas.width;
-            }
+        // Снаряды
+        const bullets = [];
+        function shootBullet() {
+            bullets.push({ x: spaceship.x + spaceship.width / 2, y: spaceship.y, radius: 3, speed: 5 });
+        }
 
-            ctx.beginPath();
-            ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-            ctx.fillStyle = "white"; // Белые звезды
-            ctx.fill();
-        });
-    }
+        // Управление через движение устройства
+        function setupDeviceMotion() {
+            window.addEventListener("deviceorientation", (event) => {
+                const tiltX = event.gamma || 0; // Наклон по горизонтали
+                spaceship.speedX = tiltX / 10; // Устанавливаем скорость
+            });
+        }
 
-    // Счет
-    let score = 0;
+        // Фон - эффект падающих звезд
+        let stars = [];
+        function createStars() {
+            const numberOfStars = 80; // Количество звезд
 
-    // Основной игровой цикл
-    function update() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < numberOfStars; i++) {
+                const size = Math.random() * 3 + 1; // Размер звезды
+                const x = Math.random() * canvas.width; // Позиция X
+                const y = Math.random() * canvas.height; // Позиция Y
+                const speed = Math.random() * 0.5 + 0.5; // Скорость падения
 
-        // Обновление и отрисовка фона (звезды)
-        updateStars();
-
-        // Обновление позиции космолета
-        spaceship.x += spaceship.speedX;
-        if (spaceship.x < 0) spaceship.x = 0;
-        if (spaceship.x > canvas.width - spaceship.width) spaceship.x = canvas.width - spaceship.width;
-
-        // Отрисовка космолета
-        ctx.drawImage(spaceshipImg, spaceship.x, spaceship.y, spaceship.width, spaceship.height);
-
-        // Отрисовка метеоритов
-        for (let i = comets.length - 1; i >= 0; i--) {
-            const comet = comets[i];
-            comet.y += comet.speed;
-            if (comet.y > canvas.height) {
-                comets.splice(i, 1);
-            } else {
-                ctx.drawImage(meteorImg, comet.x, comet.y, comet.radius * 2, comet.radius * 2);
+                stars.push({ x, y, size, speed });
             }
         }
 
-        // Обновление снарядов
-        for (let i = bullets.length - 1; i >= 0; i--) {
-            const bullet = bullets[i];
-            bullet.y -= bullet.speed;
-            if (bullet.y < 0) {
-                bullets.splice(i, 1);
-            } else {
+        // Обновление звезд
+        function updateStars() {
+            stars.forEach(star => {
+                star.y += star.speed;
+                if (star.y > canvas.height) {
+                    star.y = 0;
+                    star.x = Math.random() * canvas.width;
+                }
+
                 ctx.beginPath();
-                ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
-                ctx.fillStyle = "yellow";
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fillStyle = "white"; // Белые звезды
                 ctx.fill();
-                ctx.closePath();
+            });
+        }
 
-                // Проверка столкновений с метеоритами
-                for (let j = comets.length - 1; j >= 0; j--) {
-                    const comet = comets[j];
-                    const dx = bullet.x - comet.x;
-                    const dy = bullet.y - comet.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < bullet.radius + comet.radius) {
-                        bullets.splice(i, 1);
-                        comets.splice(j, 1);
-                        score++;
-                        scoreText.textContent = score;
-                        break;
+        // Счет
+        let score = 0;
+
+        // Основной игровой цикл
+        function update() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Обновление и отрисовка фона (звезды)
+            updateStars();
+
+            // Обновление позиции космолета
+            spaceship.x += spaceship.speedX;
+            if (spaceship.x < 0) spaceship.x = 0;
+            if (spaceship.x > canvas.width - spaceship.width) spaceship.x = canvas.width - spaceship.width;
+
+            // Отрисовка космолета
+            ctx.drawImage(spaceshipImg, spaceship.x, spaceship.y, spaceship.width, spaceship.height);
+
+            // Отрисовка метеоритов
+            for (let i = comets.length - 1; i >= 0; i--) {
+                const comet = comets[i];
+                comet.y += comet.speed;
+                if (comet.y > canvas.height) {
+                    comets.splice(i, 1);
+                } else {
+                    ctx.drawImage(meteorImg, comet.x, comet.y, comet.radius * 2, comet.radius * 2);
+                }
+            }
+
+            // Обновление снарядов
+            for (let i = bullets.length - 1; i >= 0; i--) {
+                const bullet = bullets[i];
+                bullet.y -= bullet.speed;
+                if (bullet.y < 0) {
+                    bullets.splice(i, 1);
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = "yellow";
+                    ctx.fill();
+                    ctx.closePath();
+
+                    // Проверка столкновений с метеоритами
+                    for (let j = comets.length - 1; j >= 0; j--) {
+                        const comet = comets[j];
+                        const dx = bullet.x - comet.x;
+                        const dy = bullet.y - comet.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < bullet.radius + comet.radius) {
+                            bullets.splice(i, 1);
+                            comets.splice(j, 1);
+                            score++; // Увеличиваем счет
+                            scoreText.textContent = score; // Обновляем текст счета
+                            break;
+                        }
                     }
                 }
             }
+
+            // Создание новых метеоритов
+            if (Math.random() < 0.02) createComet();
+
+            requestAnimationFrame(update);
         }
 
-        // Создание новых метеоритов
-        if (Math.random() < 0.02) createComet();
+        // Запуск игры
+        startButton.addEventListener("click", () => {
+            console.log("Кнопка нажата. Игра началась!");
+            if (typeof DeviceOrientationEvent.requestPermission === "function") {
+                DeviceOrientationEvent.requestPermission()
+                    .then((response) => {
+                        if (response === "granted") {
+                            setupDeviceMotion();
+                        } else {
+                            alert("Доступ к датчикам отклонён.");
+                        }
+                    })
+                    .catch(() => alert("Ваш браузер не поддерживает DeviceOrientation API."));
+            } else {
+                setupDeviceMotion(); // Для браузеров, которые не требуют разрешения
+            }
 
-        requestAnimationFrame(update);
-    }
+            startButton.style.display = "none";
+            createStars();
+            update();
+        });
 
-    // Начало игры
-    function startGame() {
-        canvas.style.display = "block";
-        startButton.style.display = "none";
-        createStars();
-        update();
-        setupDeviceMotion();
-    }
+        // Стрельба
+        canvas.addEventListener("touchstart", function(event) {
+            event.preventDefault();
+            shootBullet();
+        });
 
-    // При старте игры
-    startButton.addEventListener("click", startGame);
-    setInterval(shootBullet, 500);
+        canvas.addEventListener("click", function(event) {
+            shootBullet();
+        });
 
-</script>
+        // Полноэкранный режим
+        tg.MainButton.setParams({
+            text: "Переключить полноэкранный режим",
+            color: "#007BFF"
+        });
+
+        tg.MainButton.onClick(() => {
+            if (tg.isFullscreen) {
+                tg.exitFullscreen(); // Выключаем полноэкранный режим
+                console.log("Выключен полноэкранный режим.");
+            } else {
+                tg.requestFullscreen(); // Включаем полноэкранный режим
+                console.log("Включен полноэкранный режим.");
+            }
+            tg.MainButton.hide();  // Скрыть кнопку после нажатия
+        });
+
+        // Растягиваем на весь экран при открытии
+        window.onload = () => {
+            tg.MainButton.show();
+        };
+    </script>
 </body>
 </html>
