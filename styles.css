@@ -1,53 +1,47 @@
+@font-face {
+    font-family: 'Monocraft';
+    src: url('Monocraft.otf') format('opentype');
+}
+
 body {
-  --bg-color: var(--tg-theme-bg-color);
-  font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, Verdana, sans-serif;
-  background-color: var(--bg-color);
-  color: var(--tg-theme-text-color);
-  margin: 5px 5px;
-  padding: 0;
-  color-scheme: var(--tg-color-scheme);
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #000;
+    font-family: 'Monocraft', monospace;
 }
 
-a {
-  color: var(--tg-theme-link-color);
+canvas {
+    display: block;
 }
 
-#viewport {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: var(--tg-viewport-stable-height, 100vh);
-  pointer-events: none;
-  transition: all .2s ease;
+#startButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 40px;
+    font-size: 18px;
+    background: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    z-index: 10;
 }
 
-.tabs {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  border-bottom: 1px solid #ccc;
+#score {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
 }
 
-.tab {
-  flex: 1;
-  text-align: center;
-  padding: 10px;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-}
-
-.tab.active {
-  border-bottom-color: var(--tg-theme-link-color);
-}
-
-.tab-content {
-  display: none;
-  padding: 20px;
-}
-
-.tab-content.active {
-  display: block;
+#score img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
 }
