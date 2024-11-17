@@ -259,12 +259,10 @@
 
         // Функция для перехода в полноэкранный режим
         function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
+            if (!tg.WebApp.IsFullScreen) {
+                tg.WebApp.requestFullscreen();
             } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
+                tg.WebApp.exitFullscreen();
             }
         }
 
