@@ -2,17 +2,24 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini App Telegram</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Telegram Mini Apps</title>
     <style>
-        body, html {
-            margin: 0;
+        body {
+            --bg-color: var(--tg-theme-bg-color);
+            font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--tg-theme-text-color);
+            margin: 48px 24px;
             padding: 0;
-            height: 100%;
-            overflow: hidden;
-            font-family: Arial, sans-serif;
+            color-scheme: var(--tg-color-scheme);
         }
 
+        a {
+            color: var(--tg-theme-link-color);
+        }
+        
         #app {
             display: flex;
             flex-direction: column;
@@ -29,59 +36,165 @@
             background-color: #f4f4f4;
             padding: 20px;
         }
+
+        #viewport {
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: var(--tg-viewport-stable-height, 100vh);
+            pointer-events: none;
+            transition: all .2s ease;
+        }
+
+        #viewport-params-size,
+        #viewport-params-expand {
+            content: attr(text);
+            position: absolute;
+            display: inline-block;
+            background: var(--tg-theme-link-color, rgb(64, 224, 208));
+            right: 4px;
+            left: auto;
+            font-size: 8px;
+            padding: 4px;
+            vertical-align: top;
+        }
+
+        #viewport-params-size {
+            top: 4px;
+        }
+
+        #viewport-params-expand {
+            top: 30px;
+        }
     </style>
 </head>
 <body>
-
-<div id="app">
-    <div class="content">
-        Контент приложения 1
+    <div id="app">
+        <div class="content">
+            Контент приложения 1
+        </div>
     </div>
-</div>
 
-<!-- Подключаем Telegram Web App API -->
-<script src="https://telegram.org/js/telegram-web-app.js?56"></script>
+    <div align="center">
+        <a href="https://ton.org/"><img width="48" src="./assets/tapps.png" alt="logo of telegram web apps"></a>
+    </div>
+    <h1>Modals</h1>
+    <button onclick="Telegram.WebApp.showAlert('Hello World!');">Launch Alert</button>
+    <button onclick="showPopup();">Launch Popup</button>
 
-<script>
-    const tg = window.Telegram.WebApp;
+    <h1>Links</h1>
+    <ul>
+        <li>
+            <a href="javascript:Telegram.WebApp.openTelegramLink('https://t.me/trendingapps');">Open link within Telegram</a>
+        </li>
+        <li>
+            <a href="javascript:Telegram.WebApp.openLink('https://ton.org/');">Open link in external browser</a>
+        </li>
+        <li>
+            <a href="javascript:Telegram.WebApp.openLink('https://telegra.ph/api',{try_instant_view:true});">Open link inside Telegram webview</a>
+        </li>
+    </ul>
 
-    // Растягиваем на весь экран при открытии
-    window.onload = () => {
-        tg.expand();  // Метод для автоматического растягивания
-    };
+    <h1>Buttons</h1>
+    <button onclick="Telegram.WebApp.expand();">Expand Webview</button>
+    <button onclick="toggleMainButton();">Toggle Main Button</button>
 
-    // Инициализация кнопки в настройках
-    tg.web_app_setup_settings_button({
-        is_visible: true // Делаем кнопку видимой
-    });
+    <div id="viewport"></div>
+    <div id="viewport-params-size"></div>
+    <div id="viewport-params-expand"></div>
 
-    // Обработчик для кнопки в настройках
-    tg.SettingsButton.onClick(() => {
-        if (tg.isFullscreen) {
-            tg.exitFullscreen(); // Выключаем полноэкранный режим
-            console.log("Выключен полноэкранный режим.");
-        } else {
-            tg.requestFullscreen(); // Включаем полноэкранный режим
-            console.log("Включен полноэкранный режим.");
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+
+        // Инициализация Telegram Web App
+        tg.MainButton.setParams({
+            text: "Начать игру",
+            color: "#007BFF"
+        });
+
+        // Показать кнопку Telegram
+        tg.MainButton.show();
+
+        // Действие при нажатии на кнопку Telegram
+        tg.MainButton.onClick(() => {
+            startGame();
+            tg.MainButton.hide();  // Скрыть кнопку после нажатия
+        });
+
+        // Создаем кнопку для переключения полноэкранного режима
+        tg.MainButton.setParams({
+            text: "Переключить полноэкранный режим",
+            color: "#007BFF"
+        });
+
+        tg.MainButton.onClick(() => {
+            if (tg.isFullscreen) {
+                tg.exitFullscreen(); // Выключаем полноэкранный режим
+                console.log("Выключен полноэкранный режим.");
+            } else {
+                tg.requestFullscreen(); // Включаем полноэкранный режим
+                console.log("Включен полноэкранный режим.");
+            }
+            tg.MainButton.hide();  // Скрыть кнопку после нажатия
+        });
+
+        // Функция для вызова showPopup API
+        function showPopup() {
+            Telegram.WebApp.showPopup({
+                title: 'Title',
+                message: 'Some message',
+                buttons: [
+                    {id: 'link', type: 'default', text: 'Open ton.org'},
+                    {type: 'cancel'},
+                ]
+            }, function(btn) {
+                if (btn === 'link') {
+                    Telegram.WebApp.openLink('https://ton.org/');
+                }
+            });
+        };
+
+        // Функция для переключения видимости кнопки
+        function toggleMainButton() {
+            if (Telegram.WebApp.MainButton.isVisible) {
+                Telegram.WebApp.MainButton.hide();
+            } else {
+                Telegram.WebApp.MainButton.show();
+            }
+        };
+
+        // Инициализация TWA
+        Telegram.WebApp.ready();
+
+        // Обработчик события смены темы
+        Telegram.WebApp.onEvent('themeChanged', function() {
+            document.documentElement.className = Telegram.WebApp.colorScheme;
+        });
+
+        // Обновление данных о размере окна
+        function setViewportData() {
+            var sizeEl = document.getElementById('viewport-params-size');
+            sizeEl.innerText = 'width: ' + window.innerWidth + ' x ' + 
+                'height: ' + Telegram.WebApp.viewportStableHeight;
+
+            var expandEl = document.querySelector('#viewport-params-expand');
+            expandEl.innerText = 'Is Expanded: ' + (Telegram.WebApp.isExpanded ? 'true' : 'false');
         }
-    });
 
-    // Показать кнопку Telegram в настройках
-    tg.MainButton.setParams({
-        text: "Начать игру",
-        color: "#007BFF"
-    });
+        Telegram.WebApp.setHeaderColor('secondary_bg_color');
+        setViewportData();
+        Telegram.WebApp.onEvent('viewportChanged', setViewportData);
 
-    // Показать кнопку Telegram
-    tg.MainButton.show();
+        Telegram.WebApp.onEvent('themeChanged', function() {
+            document.body.setAttribute('style', '--bg-color:' + Telegram.WebApp.backgroundColor);
+        });
+    </script>
 
-    // Действие при нажатии на кнопку Telegram
-    tg.MainButton.onClick(() => {
-        startGame();
-        tg.MainButton.hide();  // Скрыть кнопку после нажатия
-    });
-
-</script>
-
+    <!-- Eruda is console for mobile browsers -->
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
 </body>
 </html>
