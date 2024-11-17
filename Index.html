@@ -55,6 +55,13 @@
         // Вызов функции для отображения стабильной высоты области просмотра
         window.addEventListener('resize', getViewportStableHeight);
         getViewportStableHeight(); // Инициализация при загрузке страницы
+
+        // Отслеживание события изменения стабильной высоты
+        tg.onEvent('viewportChanged', (e) => {
+            if (e.isStateStable) {
+                console.log('Стабильная высота обновлена:', tg.viewportStableHeight);
+            }
+        });
     </script>
 </body>
 </html>
