@@ -48,6 +48,8 @@
             margin-right: 10px; /* Отступ между изображением и текстом */
         }
     </style>
+    <!-- Подключаем Telegram Web App -->
+    <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
 </head>
 <body>
     <canvas id="gameCanvas"></canvas>
@@ -76,6 +78,9 @@
 
         const scoreIcon = new Image();
         scoreIcon.src = "score-icon.png"; // Иконка перед счетом
+
+        // Инициализация Telegram Web App
+        Telegram.WebApp.init();
 
         // Космолет
         const spaceship = {
