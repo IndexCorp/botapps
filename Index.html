@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fullscreen & Expand Example</title>
+    <title>Fullscreen Example</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,52 +23,27 @@
     <script>
         const tg = window.Telegram.WebApp;
 
-        // Инициализация кнопки SettingsButton
+        // Настройка кнопки SettingsButton
         tg.SettingsButton.setParams({
-            text: "Полный экран"
+            text: "Развернуть на всю высоту"
         });
 
         // Обработчик нажатия на кнопку SettingsButton
         tg.SettingsButton.onClick(() => {
-            if (tg.isFullscreen) {
-                tg.exitFullscreen(); // Выход из полноэкранного режима
+            if (tg.isExpanded) {
+                // Если мини-приложение уже развернуто, вернуть его в обычный размер
+                tg.expand(); // В данном случае не делаем ничего, так как mini app уже в полном размере
                 tg.SettingsButton.setParams({
-                    text: "Включить полноэкранный режим"
+                    text: "Восстановить размер"
                 });
             } else {
-                tg.requestFullscreen(); // Вход в полноэкранный режим
+                // Разворачиваем мини-приложение на всю высоту
+                tg.expand(); // Этот метод будет растягивать мини-приложение
                 tg.SettingsButton.setParams({
-                    text: "Выйти из полноэкранного режима"
+                    text: "Восстановить размер"
                 });
             }
         });
-
-        // Функция для проверки и развертывания мини-приложения
-        function checkAndExpand() {
-            if (!tg.isExpanded) {
-                tg.expand(); // Разворачиваем приложение на максимальную высоту
-                console.log("Мини-приложение развернуто на максимальную высоту.");
-            } else {
-                console.log("Мини-приложение уже развернуто.");
-            }
-        }
-
-        // Добавление кнопки для развертывания
-        const expandButton = document.createElement("button");
-        expandButton.innerText = "Развернуть мини-приложение";
-        expandButton.style.position = "absolute";
-        expandButton.style.top = "20px";
-        expandButton.style.left = "20px";
-        expandButton.style.padding = "10px 20px";
-        expandButton.style.fontSize = "16px";
-        expandButton.style.backgroundColor = "#007BFF";
-        expandButton.style.color = "#fff";
-        expandButton.style.border = "none";
-        expandButton.style.borderRadius = "5px";
-        expandButton.style.cursor = "pointer";
-
-        expandButton.onclick = () => checkAndExpand();
-        document.body.appendChild(expandButton);
 
         // Показать кнопку SettingsButton
         tg.SettingsButton.show();
