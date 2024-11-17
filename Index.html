@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fullscreen Example</title>
+    <title>Fullscreen & Expand Example</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -62,6 +62,33 @@
                 console.log('Стабильная высота обновлена:', tg.viewportStableHeight);
             }
         });
+
+        // Функция для проверки состояния развернутости и использования expand()
+        function checkAndExpand() {
+            if (!tg.isExpanded) {
+                tg.expand(); // Разворачиваем приложение на максимальную высоту
+                console.log("Мини-приложение развернуто на максимальную высоту.");
+            } else {
+                console.log("Мини-приложение уже развернуто.");
+            }
+        }
+
+        // Проверка и развертывание по кнопке
+        const expandButton = document.createElement("button");
+        expandButton.innerText = "Развернуть мини-приложение";
+        expandButton.style.position = "absolute";
+        expandButton.style.top = "20px";
+        expandButton.style.left = "20px";
+        expandButton.style.padding = "10px 20px";
+        expandButton.style.fontSize = "16px";
+        expandButton.style.backgroundColor = "#007BFF";
+        expandButton.style.color = "#fff";
+        expandButton.style.border = "none";
+        expandButton.style.borderRadius = "5px";
+        expandButton.style.cursor = "pointer";
+
+        expandButton.onclick = () => checkAndExpand();
+        document.body.appendChild(expandButton);
     </script>
 </body>
 </html>
