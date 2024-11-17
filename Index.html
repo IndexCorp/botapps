@@ -1,37 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <title>Gram Apps</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Космолет</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
 </head>
 <body>
-        <ul class="tabs">
-            <li class="tab active" onclick="changeTab(0)">Tab 1</li>
-            <li class="tab" onclick="changeTab(1)">Tab 2</li>
-            <li class="tab" onclick="changeTab(2)">Инструкции</li>
-        </ul>
-        <div class="tab-content active" id="tab-content-1">
-            <h2>Tab 1 Content</h2>
-            <p>This is the content of Tab 1.</p>
-        </div>
-        <div class="tab-content" id="tab-content-2">
-            <h2>Tab 2 Content</h2>
-            <p>This is the content of Tab 2.</p>
-        </div>
-        <div class="tab-content" id="tab-content-3">
-            <h2>Tab 3 Content</h2>
-            <p>This is the content of Tab 3.</p>
-        </div>
-    </main>
+    <canvas id="gameCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
 
-    <div id="viewport"></div>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="script.js"></script>
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Космолет
+        const spaceship = {
+            x: canvas.width / 2,
+            y: canvas.height - 100,
+            width: 50,
+            height: 50,
+            color: "blue",
+            speedX: 0
+        };
+
+        // Кометы
+        const comets = [];
+        function createComet() {
+            const x = Math.random() * canvas.width;
+            comets.push({ x, y: 0, radius: 20, speed: 2 + Math.random() * 3 });
+        }
+
+        // Снаряды
+        const bullets = [];
+        function shootBullet() {
+            bullets.push({ x: spaceship.x + spaceship.width / 2, y: spaceship.y, radius: 5, speed: 5 });
+        }
+
+        // Управление через движение устройства
+        window.addEventListener("deviceorientation", (event) => {
+            const tiltX = event.gamma; // Наклон по горизонтали
+            spaceship.speedX = tiltX / 10; // Устанавливаем скорость
+        });
+
+        // Основной игровой цикл
+        function update() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Обновление позиции космолета
+            spaceship.x += spaceship.speedX;
+            if (spaceship.x < 0) spaceship.x = 0;
+            if (spaceship.x > canvas.width - spaceship.width) spaceship.x = canvas.width - spaceship.width;
+
+            // Отрисовка космолета
+            ctx.fillStyle = spaceship.color;
+            ctx.fillRect(spaceship.x, spaceship.y, spaceship.width, spaceship.height);
+
+            // Обновление комет
+            for (let i = comets.length - 1; i >= 0; i--) {
+                const comet = comets[i];
+                comet.y += comet.speed;
+                if (comet.y > canvas.height) {
+                    comets.splice(i, 1); // Удаляем кометы за пределами экрана
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(comet.x, comet.y, comet.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = "red";
+                    ctx.fill();
+                    ctx.closePath();
+                }
+            }
+
+            // Обновление снарядов
+            for (let i = bullets.length - 1; i >= 0; i--) {
+                const bullet = bullets[i];
+                bullet.y -= bullet.speed;
+                if (bullet.y < 0) {
+                    bullets.splice(i, 1); // Удаляем снаряды за пределами экрана
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = "yellow";
+                    ctx.fill();
+                    ctx.closePath();
+
+                    // Проверка на столкновения с кометами
+                    for (let j = comets.length - 1; j >= 0; j--) {
+                        const comet = comets[j];
+                        const dx = bullet.x - comet.x;
+                        const dy = bullet.y - comet.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < bullet.radius + comet.radius) {
+                            bullets.splice(i, 1);
+                            comets.splice(j, 1);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Добавляем новые кометы
+            if (Math.random() < 0.02) createComet();
+
+            requestAnimationFrame(update);
+        }
+
+        // Запуск игры
+        update();
+
+        // Стрельба
+        window.addEventListener("click", shootBullet);
+    </script>
 </body>
 </html>
