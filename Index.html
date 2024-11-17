@@ -1,90 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        #container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            justify-content: center;
-            align-items: center;
-            background-color: #f0f0f0;
-        }
-
-        #mainButton {
-            padding: 10px 20px;
-            background-color: #0088cc;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        #status {
-            margin-top: 20px;
-            font-size: 16px;
-            color: #555;
-        }
-
-        /* Styles for dark mode */
-        :root {
-            --tg-color-scheme: light;
-        }
-
-        [data-theme="dark"] {
-            background-color: #333;
-            color: white;
-        }
-    </style>
+    <title>Mini App</title>
 </head>
 <body>
-    <div id="container">
-        <button id="mainButton">Main Action</button>
-        <div id="status">App Initialized</div>
-    </div>
-
+    <h1>Пример Mini App</h1>
     <script>
-        // Wait for the Telegram Web App to be ready
-        window.Telegram.WebApp.onEvent('initialized', function() {
-            // Set the color scheme based on the Telegram app's settings
-            if (window.Telegram.WebApp.colorScheme === 'dark') {
-                document.body.setAttribute('data-theme', 'dark');
-            } else {
-                document.body.removeAttribute('data-theme');
-            }
+        // Инициализация
+        const tg = window.Telegram.WebApp;
 
-            // Set header color
-            window.Telegram.WebApp.setHeaderColor("#0088cc");
+        // Получаем данные из initData
+        console.log(tg.initData);
 
-            // Set the app's background color
-            window.Telegram.WebApp.setBackgroundColor("#f0f0f0");
+        // Изменяем цвет заголовка
+        tg.setHeaderColor("#FF5733");
 
-            // Set bottom bar color
-            window.Telegram.WebApp.setBottomBarColor("#0088cc");
+        // Метод для отправки данных на сервер
+        function sendDataToBot() {
+            tg.sendData("Hello from Mini App!");
+        }
 
-            // Display the current theme
-            const statusElement = document.getElementById('status');
-            statusElement.textContent = `Color Scheme: ${window.Telegram.WebApp.colorScheme}`;
-        });
-
-        // Button click event to interact with Telegram Web App
-        document.getElementById('mainButton').addEventListener('click', function() {
-            window.Telegram.WebApp.sendData("Hello from the Mini App!");
-        });
-
-        // Handle if the user tries to close the app
-        window.Telegram.WebApp.enableClosingConfirmation();
+        // Пример кнопки
+        const button = document.createElement('button');
+        button.textContent = 'Отправить данные';
+        button.onclick = sendDataToBot;
+        document.body.appendChild(button);
     </script>
 </body>
 </html>
