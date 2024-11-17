@@ -51,6 +51,22 @@
         window.onload = () => {
             tgApp.expand();  // Метод для автоматического растягивания
         };
+
+        // Настроим кнопку настроек в правом верхнем углу
+        tgApp.webAppSetupSettingsButton({
+            is_visible: true  // Делаем кнопку видимой
+        });
+
+        // Обработчик нажатия на кнопку настроек
+        tgApp.onEvent('settings_button_pressed', () => {
+            if (tgApp.isFullscreen) {
+                tgApp.exitFullscreen();  // Если в полноэкранном режиме, выходим
+                console.log("Выключен полноэкранный режим.");
+            } else {
+                tgApp.requestFullscreen();  // Если не в полноэкранном режиме, входим
+                console.log("Включен полноэкранный режим.");
+            }
+        });
     }
 </script>
 
