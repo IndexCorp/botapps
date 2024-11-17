@@ -1,52 +1,101 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fullscreen Example</title>
+    <title>Мини-приложение</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #000;
-            color: white;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #content {
+            width: 80%;
+            height: 80%;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script>
-        const tg = window.Telegram.WebApp;
+    <div id="content">
+        <h1>Мини-приложение</h1>
+    </div>
 
-        // Настройка кнопки SettingsButton
-        tg.SettingsButton.setParams({
-            text: "Развернуть на всю высоту"
+    <script>
+        let isFullscreen = false;
+
+        // Функция для переключения полноэкранного режима
+        function toggleFullscreen() {
+            if (!isFullscreen) {
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+                    document.documentElement.mozRequestFullScreen();
+                } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari
+                    document.documentElement.webkitRequestFullscreen();
+                } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+                    document.documentElement.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) { // Firefox
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) { // Chrome, Safari
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { // IE/Edge
+                    document.msExitFullscreen();
+                }
+            }
+            isFullscreen = !isFullscreen;
+        }
+
+        // Обработчик контекстного меню
+        document.addEventListener("contextmenu", function(event) {
+            event.preventDefault(); // Отключаем стандартное контекстное меню
+
+            // Создаем и отображаем кастомное контекстное меню
+            const menu = document.createElement("div");
+            menu.style.position = "absolute";
+            menu.style.left = `${event.pageX}px`;
+            menu.style.top = `${event.pageY}px`;
+            menu.style.backgroundColor = "#fff";
+            menu.style.border = "1px solid #ccc";
+            menu.style.boxShadow = "0 4px 8px rgba(0,0,0,0.2)";
+            menu.style.zIndex = 9999;
+
+            const settingsButton = document.createElement("button");
+            settingsButton.textContent = "Настройки";
+            settingsButton.style.padding = "10px 20px";
+            settingsButton.style.border = "none";
+            settingsButton.style.cursor = "pointer";
+
+            // Обработчик для кнопки "Настройки"
+            settingsButton.addEventListener("click", function() {
+                toggleFullscreen();
+                document.body.removeChild(menu); // Убираем меню после нажатия
+            });
+
+            menu.appendChild(settingsButton);
+            document.body.appendChild(menu);
         });
 
-        // Обработчик нажатия на кнопку SettingsButton
-        tg.SettingsButton.onClick(() => {
-            if (tg.isExpanded) {
-                // Если мини-приложение уже развернуто, вернуть его в обычный размер
-                tg.expand(); // В данном случае не делаем ничего, так как mini app уже в полном размере
-                tg.SettingsButton.setParams({
-                    text: "Восстановить размер"
-                });
-            } else {
-                // Разворачиваем мини-приложение на всю высоту
-                tg.expand(); // Этот метод будет растягивать мини-приложение
-                tg.SettingsButton.setParams({
-                    text: "Восстановить размер"
-                });
+        // Закрытие контекстного меню при клике вне его
+        document.addEventListener("click", function() {
+            const menu = document.querySelector("div");
+            if (menu) {
+                document.body.removeChild(menu);
             }
         });
-
-        // Показать кнопку SettingsButton
-        tg.SettingsButton.show();
     </script>
 </body>
 </html>
