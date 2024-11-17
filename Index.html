@@ -43,27 +43,7 @@
             }
         });
 
-        // Показать кнопку SettingsButton
-        tg.SettingsButton.show();
-
-        // Функция для получения стабильной высоты области просмотра
-        function getViewportStableHeight() {
-            const stableHeight = tg.viewportStableHeight;
-            console.log("Стабильная высота области просмотра:", stableHeight);
-        }
-
-        // Вызов функции для отображения стабильной высоты области просмотра
-        window.addEventListener('resize', getViewportStableHeight);
-        getViewportStableHeight(); // Инициализация при загрузке страницы
-
-        // Отслеживание события изменения стабильной высоты
-        tg.onEvent('viewportChanged', (e) => {
-            if (e.isStateStable) {
-                console.log('Стабильная высота обновлена:', tg.viewportStableHeight);
-            }
-        });
-
-        // Функция для проверки состояния развернутости и использования expand()
+        // Функция для проверки и развертывания мини-приложения
         function checkAndExpand() {
             if (!tg.isExpanded) {
                 tg.expand(); // Разворачиваем приложение на максимальную высоту
@@ -73,7 +53,7 @@
             }
         }
 
-        // Проверка и развертывание по кнопке
+        // Добавление кнопки для развертывания
         const expandButton = document.createElement("button");
         expandButton.innerText = "Развернуть мини-приложение";
         expandButton.style.position = "absolute";
@@ -89,6 +69,9 @@
 
         expandButton.onclick = () => checkAndExpand();
         document.body.appendChild(expandButton);
+
+        // Показать кнопку SettingsButton
+        tg.SettingsButton.show();
     </script>
 </body>
 </html>
