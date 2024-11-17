@@ -72,15 +72,13 @@
         <img src="score-icon.png" alt="Score Icon">
         <span id="scoreText">0</span>
     </div>
-
-    <button id="fullscreenButton">Полный экран</button>
     
     <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
 
     <script>
         const tg = window.Telegram.WebApp;
 
-        // Инициализация Telegram Web App
+        // Инициализация кнопки Telegram
         tg.MainButton.setParams({
             text: "Начать игру",
             color: "#007BFF"
@@ -265,6 +263,18 @@
                 tg.WebApp.exitFullscreen();
             }
         }
+
+        // Добавление кнопки в меню настроек
+        const settingsButton = tg.SettingsButton;
+
+        // Сделать кнопку настроек видимой
+        settingsButton.show();
+
+        // Добавить обработчик события для кнопки настроек
+        settingsButton.onClick(() => {
+            // При нажатии на кнопку настроек активируем полноэкранный режим
+            toggleFullscreen();
+        });
 
         // Привязка кнопки для полноэкранного режима
         const fullscreenButton = document.getElementById("fullscreenButton");
