@@ -52,6 +52,19 @@
             height: 30px;
             margin-right: 10px;
         }
+
+        #fullscreenButton {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
@@ -252,17 +265,12 @@
             }
         }
 
-        // Добавление кнопки в меню настроек
-        const settingsButton = tg.SettingsButton;
-
-        // Сделать кнопку настроек видимой
-        settingsButton.show();
-
-        // Добавить обработчик события для кнопки настроек
-        settingsButton.onClick(() => {
-            // При нажатии на кнопку настроек активируем полноэкранный режим
-            toggleFullscreen();
-        });
+        // Создаем кнопку для полноэкранного режима
+        const fullscreenButton = document.createElement("button");
+        fullscreenButton.id = "fullscreenButton";
+        fullscreenButton.textContent = "Полный экран";
+        fullscreenButton.onclick = toggleFullscreen;
+        document.body.appendChild(fullscreenButton);
 
         canvas.addEventListener("touchstart", function(event) {
             event.preventDefault();
