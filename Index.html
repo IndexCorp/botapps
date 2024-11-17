@@ -26,6 +26,9 @@
             text-align: center;
             padding: 10px;
             font-size: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .content {
@@ -38,35 +41,33 @@
             padding: 20px;
         }
 
-        #fullscreenButton {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 10px 20px;
-            background-color: #0078ff;
-            color: white;
-            border: none;
+        .fullscreen-button {
+            padding: 8px 16px;
+            background-color: #ffffff;
+            color: #0078ff;
+            border: 1px solid #0078ff;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
         }
 
-        #fullscreenButton:hover {
-            background-color: #005bb5;
+        .fullscreen-button:hover {
+            background-color: #0078ff;
+            color: white;
         }
     </style>
 </head>
 <body>
 
 <div id="app">
-    <div class="header">Мини-аппликация Telegram</div>
+    <div class="header">
+        <div>Мини-аппликация Telegram</div>
+        <button class="fullscreen-button" id="fullscreenButton">Переключить полноэкранный режим</button>
+    </div>
     <div class="content">
         Контент приложения
     </div>
 </div>
-
-<button id="fullscreenButton">Переключить полноэкранный режим</button>
 
 <!-- Подключаем Telegram Web App API -->
 <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
