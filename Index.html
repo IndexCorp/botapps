@@ -73,16 +73,19 @@
             color: "#007BFF"
         });
 
+        // Показать кнопку Telegram
+        tg.MainButton.show();
+
         // Создаем кнопку для переключения полноэкранного режима
-        tg.MainButton.setParams({
+        tg.SettingsButton.setParams({
         text: "Переключить полноэкранный режим",
         color: "#007BFF"
         });
 
-        tg.MainButton.show();
+        tg.SettingsButton.show();
 
         // Обработчик нажатия на кнопку
-        tg.MainButton.onClick(() => {
+        tg.SettingsButton.onClick(() => {
         if (tg.isFullscreen) {
         tg.exitFullscreen(); // Выключаем полноэкранный режим
         console.log("Выключен полноэкранный режим.");
@@ -91,9 +94,6 @@
         console.log("Включен полноэкранный режим.");
         }
         });
-
-        // Показать кнопку Telegram
-        tg.MainButton.show();
 
         // Действие при нажатии на кнопку Telegram
         tg.MainButton.onClick(() => {
