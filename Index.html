@@ -17,9 +17,11 @@
             background-color: #000; /* Космический темный фон */
             font-family: 'Monocraft', monospace; /* Применение шрифта */
         }
+
         canvas {
             display: block;
         }
+
         #startButton {
             position: absolute;
             top: 50%;
@@ -32,7 +34,9 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
+            z-index: 10; /* Добавлен z-index, чтобы кнопка была поверх других элементов */
         }
+
         #score {
             position: absolute;
             top: 10px;
@@ -42,14 +46,13 @@
             display: flex;
             align-items: center;
         }
+
         #score img {
             width: 30px; /* Размер изображения, соответствующий шрифту */
             height: 30px;
             margin-right: 10px; /* Отступ между изображением и текстом */
         }
     </style>
-    <!-- Подключаем Telegram Web App -->
-    <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
 </head>
 <body>
     <canvas id="gameCanvas"></canvas>
@@ -78,9 +81,6 @@
 
         const scoreIcon = new Image();
         scoreIcon.src = "score-icon.png"; // Иконка перед счетом
-
-        // Инициализация Telegram Web App
-        Telegram.WebApp.init();
 
         // Космолет
         const spaceship = {
@@ -210,6 +210,7 @@
 
         // Запуск игры
         startButton.addEventListener("click", () => {
+            console.log("Кнопка нажата. Игра началась!");
             if (typeof DeviceOrientationEvent.requestPermission === "function") {
                 DeviceOrientationEvent.requestPermission()
                     .then((response) => {
