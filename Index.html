@@ -3,31 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
-    <title>Mini App</title>
-</head>
-<body>
-    <h1>Пример Mini App</h1>
-    <script>
-        // Инициализация
-        const tg = window.Telegram.WebApp;
-
-        // Получаем данные из initData
-        console.log(tg.initData);
-
-        // Изменяем цвет заголовка
-        tg.setHeaderColor("#FF5733");
-
-        // Метод для отправки данных на сервер
-        function sendDataToBot() {
-            tg.sendData("Hello from Mini App!");
+    <title>Mini App Telegram</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
         }
 
-        // Пример кнопки
-        const button = document.createElement('button');
-        button.textContent = 'Отправить данные';
-        button.onclick = sendDataToBot;
-        document.body.appendChild(button);
-    </script>
+        #app {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: space-between;
+        }
+
+        .header {
+            background-color: #0078ff;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 20px;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        #fullscreenButton {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #0078ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #fullscreenButton:hover {
+            background-color: #005bb5;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <div class="header">Мини-аппликация Telegram</div>
+    <div class="content">
+        Контент приложения
+    </div>
+</div>
+
+<button id="fullscreenButton">Переключить полноэкранный режим</button>
+
+<!-- Подключаем Telegram Web App API -->
+<script src="https://telegram.org/js/telegram-web-app.js?56"></script>
+
+<script>
+    // Проверяем, доступен ли объект Telegram Web App
+    if (window.Telegram.WebApp) {
+        const tgApp = window.Telegram.WebApp;
+
+        // Растягиваем на весь экран при открытии
+        window.onload = () => {
+            tgApp.expand();  // Метод для автоматического растягивания
+        };
+
+        // Обработчик для переключения полноэкранного режима
+        function toggleFullscreen() {
+            tgApp.toggleFullscreen(); // Встроенная функция для полноэкранного режима
+        }
+
+        // Привязываем обработчик события к кнопке
+        document.getElementById("fullscreenButton").addEventListener("click", toggleFullscreen);
+    }
+</script>
+
 </body>
 </html>
