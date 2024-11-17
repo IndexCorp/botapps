@@ -82,14 +82,6 @@
             tgApp.expand();  // Метод для автоматического растягивания
         };
 
-        // Обработчик для переключения полноэкранного режима
-        function toggleFullscreen() {
-            tgApp.toggleFullscreen(); // Встроенная функция для полноэкранного режима
-        }
-
-        // Привязываем обработчик события к кнопке
-        document.getElementById("fullscreenButton").addEventListener("click", toggleFullscreen);
-
         // Настройка кнопки "Настройки" в верхнем правом углу
         tgApp.webAppSetupSettingsButton();
 
@@ -97,6 +89,17 @@
         tgApp.onEvent('settings_button_pressed', function() {
             alert('Кнопка настроек была нажата');
             // Здесь можно добавить ваш код для обработки нажатия
+        });
+
+        // Обработчик нажатия на кнопку для переключения полноэкранного режима
+        tgApp.SettingsButton.onClick(() => {
+            if (tgApp.isFullscreen) {
+                tgApp.exitFullscreen(); // Выключаем полноэкранный режим
+                console.log("Выключен полноэкранный режим.");
+            } else {
+                tgApp.requestFullscreen(); // Включаем полноэкранный режим
+                console.log("Включен полноэкранный режим.");
+            }
         });
     }
 </script>
