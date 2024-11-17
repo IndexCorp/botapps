@@ -154,7 +154,14 @@
         });
 
         // Стрельба
-        window.addEventListener("click", shootBullet);
+        canvas.addEventListener("touchstart", function(event) {
+            event.preventDefault(); // Для предотвращения стандартного поведения (например, прокрутки)
+            shootBullet();
+        });
+
+        canvas.addEventListener("click", function(event) {
+            shootBullet();
+        });
     </script>
 </body>
 </html>
