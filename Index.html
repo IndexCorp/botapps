@@ -5,11 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Космолет</title>
     <style>
+        @font-face {
+            font-family: 'Monocraft';
+            src: url('Monocraft.otf') format('opentype');
+        }
+
         body {
             margin: 0;
             padding: 0;
             overflow: hidden;
             background-color: #000; /* Космический темный фон */
+            font-family: 'Monocraft', monospace; /* Применение шрифта */
         }
         canvas {
             display: block;
@@ -27,11 +33,29 @@
             border-radius: 10px;
             cursor: pointer;
         }
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-size: 30px;
+            display: flex;
+            align-items: center;
+        }
+        #score img {
+            width: 30px; /* Размер изображения, соответствующий шрифту */
+            height: 30px;
+            margin-right: 10px; /* Отступ между изображением и текстом */
+        }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas"></canvas>
     <button id="startButton">Начать игру</button>
+    <div id="score">
+        <img src="score-icon.png" alt="Score Icon">
+        <span id="scoreText">0</span>
+    </div>
 
     <script>
         const canvas = document.getElementById("gameCanvas");
@@ -41,6 +65,7 @@
         canvas.height = window.innerHeight;
 
         const startButton = document.getElementById("startButton");
+        const scoreText = document.getElementById("scoreText");
 
         // Загружаем изображения
         const spaceshipImg = new Image();
@@ -48,6 +73,9 @@
 
         const meteorImg = new Image();
         meteorImg.src = "meteor.png"; // Пиксельный метеорит
+
+        const scoreIcon = new Image();
+        scoreIcon.src = "score-icon.png"; // Иконка перед счетом
 
         // Космолет
         const spaceship = {
@@ -82,7 +110,7 @@
         // Фон - эффект падающих звезд
         let stars = [];
         function createStars() {
-            const numberOfStars = 100; // Количество звезд
+            const numberOfStars = 80; // Количество звезд
 
             for (let i = 0; i < numberOfStars; i++) {
                 const size = Math.random() * 3 + 1; // Размер звезды
@@ -109,6 +137,9 @@
                 ctx.fill();
             });
         }
+
+        // Счет
+        let score = 0;
 
         // Основной игровой цикл
         function update() {
@@ -158,6 +189,8 @@
                         if (distance < bullet.radius + comet.radius) {
                             bullets.splice(i, 1);
                             comets.splice(j, 1);
+                            score++; // Увеличиваем счет
+                            scoreText.textContent = score; // Обновляем текст счета
                             break;
                         }
                     }
