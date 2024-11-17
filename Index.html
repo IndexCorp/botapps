@@ -20,17 +20,6 @@
             justify-content: space-between;
         }
 
-        .header {
-            background-color: #0078ff;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            font-size: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
         .content {
             flex: 1;
             display: flex;
@@ -40,30 +29,11 @@
             background-color: #f4f4f4;
             padding: 20px;
         }
-
-        .fullscreen-button {
-            padding: 8px 16px;
-            background-color: #ffffff;
-            color: #0078ff;
-            border: 1px solid #0078ff;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .fullscreen-button:hover {
-            background-color: #0078ff;
-            color: white;
-        }
     </style>
 </head>
 <body>
 
 <div id="app">
-    <div class="header">
-        <div>Мини-аппликация Telegram</div>
-        <button class="fullscreen-button" id="fullscreenButton">Переключить полноэкранный режим</button>
-    </div>
     <div class="content">
         Контент приложения
     </div>
@@ -81,26 +51,6 @@
         window.onload = () => {
             tgApp.expand();  // Метод для автоматического растягивания
         };
-
-        // Настройка кнопки "Настройки" в верхнем правом углу
-        tgApp.webAppSetupSettingsButton();
-
-        // Обработчик события нажатия на кнопку "Настройки"
-        tgApp.onEvent('settings_button_pressed', function() {
-            alert('Кнопка настроек была нажата');
-            // Здесь можно добавить ваш код для обработки нажатия
-        });
-
-        // Обработчик нажатия на кнопку для переключения полноэкранного режима
-        tgApp.SettingsButton.onClick(() => {
-            if (tgApp.isFullscreen) {
-                tgApp.exitFullscreen(); // Выключаем полноэкранный режим
-                console.log("Выключен полноэкранный режим.");
-            } else {
-                tgApp.requestFullscreen(); // Включаем полноэкранный режим
-                console.log("Включен полноэкранный режим.");
-            }
-        });
     }
 </script>
 
