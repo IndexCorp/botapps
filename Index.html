@@ -223,33 +223,6 @@
             requestAnimationFrame(update);
         }
 
-        // Переключение в полноэкранный режим
-        function requestFullscreen() {
-            if (canvas.requestFullscreen) {
-                canvas.requestFullscreen();
-            } else if (canvas.mozRequestFullScreen) { // Firefox
-                canvas.mozRequestFullScreen();
-            } else if (canvas.webkitRequestFullscreen) { // Chrome, Safari and Opera
-                canvas.webkitRequestFullscreen();
-            } else if (canvas.msRequestFullscreen) { // IE/Edge
-                canvas.msRequestFullscreen();
-            }
-        }
-
-        // Выход из полноэкранного режима
-        function exitFullscreen() {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.mozCancelFullScreen) { // Firefox
-                document.mozCancelFullScreen();
-            } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
-                document.webkitExitFullscreen();
-            } else if (document.msExitFullscreen) { // IE/Edge
-                document.msExitFullscreen();
-            }
-        }
-
-        // Старт игры
         function startGame() {
             if (typeof DeviceOrientationEvent.requestPermission === "function") {
                 DeviceOrientationEvent.requestPermission()
@@ -270,10 +243,13 @@
             update();
         }
 
-        // Обработчик события для кнопки полноэкранного режима
-        document.getElementById("startButton").addEventListener("click", () => {
-            requestFullscreen();
-            startGame();
+        canvas.addEventListener("touchstart", function(event) {
+            event.preventDefault();
+            shootBullet();
+        });
+
+        canvas.addEventListener("click", function(event) {
+            shootBullet();
         });
     </script>
 </body>
