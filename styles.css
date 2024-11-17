@@ -45,3 +45,16 @@ canvas {
     height: 30px;
     margin-right: 10px;
 }
+
+#fullscreenButton {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    z-index: 10;
+}
