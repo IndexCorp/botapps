@@ -42,22 +42,23 @@
 <!-- Подключаем Telegram Web App API -->
 <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
 <script>
-   const tg = window.Telegram.WebApp;
+  const tg = window.Telegram.WebApp;
 
-// Показываем кнопку настроек
-tg.SettingsButton.show();
+    // Показать кнопку настроек
+    tg.isFullscreen.show();
 
-tg.SettingsButton.onClick(() => {
-    if (tg.isFullscreen) {
-        // Выключаем полноэкранный режим с использованием postEvent
-        window.Telegram.WebView.postEvent("web_app_exit_fullscreen");
-        console.log("Выключен полноэкранный режим.");
-    } else {
-        // Включаем полноэкранный режим с использованием postEvent
-        window.Telegram.WebView.postEvent("web_app_request_fullscreen");
-        console.log("Включен полноэкранный режим.");
-    }
-});
+    // Добавить обработчик нажатия на кнопку настроек
+    tg.isFullscreen.onClick(() => {
+        // Проверить текущий режим и переключить его
+        if (tg.isFullscreen) {
+            tg.exitFullscreen();  // Если уже полноэкранный, выключаем
+            console.log("Выключен полноэкранный режим.");
+        } else {
+            tg.requestFullscreen();  // Если не полноэкранный, включаем
+            console.log("Включен полноэкранный режим.");
+        }
+    });
+
 
 
     // Инициализация основного экрана и кнопки (по желанию)
