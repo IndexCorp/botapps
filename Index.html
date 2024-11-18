@@ -42,44 +42,22 @@
 <!-- Подключаем Telegram Web App API -->
 <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
 <script>
- const tg = window.Telegram.WebApp;
+    const tg = window.Telegram.WebApp;
 
-// Показываем кнопку настроек
-tg.SettingsButton.show();
+    // Показать кнопку настроек
+    tg.SettingsButton.show();
 
-// Создаем новую кнопку для управления полноэкранным режимом
-const fullscreenButton = document.createElement('button');
-fullscreenButton.innerText = tg.isFullscreen ? 'Выйти из полноэкранного режима' : 'Включить полноэкранный режим';
-fullscreenButton.style.padding = '10px';
-fullscreenButton.style.backgroundColor = '#007BFF';
-fullscreenButton.style.color = 'white';
-fullscreenButton.style.border = 'none';
-fullscreenButton.style.borderRadius = '5px';
-fullscreenButton.style.cursor = 'pointer';
-document.body.appendChild(fullscreenButton);
-
-// Назначаем обработчик клика для кнопки полноэкранного режима
-fullscreenButton.addEventListener('click', () => {
-    if (tg.isFullscreen) {
-        // Выключаем полноэкранный режим с использованием postEvent
-        window.Telegram.WebView.postEvent("web_app_exit_fullscreen");
-        console.log("Выключен полноэкранный режим.");
-        fullscreenButton.innerText = 'Включить полноэкранный режим';
-    } else {
-        // Включаем полноэкранный режим с использованием postEvent
-        window.Telegram.WebView.postEvent("web_app_request_fullscreen");
-        console.log("Включен полноэкранный режим.");
-        fullscreenButton.innerText = 'Выйти из полноэкранного режима';
-    }
-});
-
-// Обновляем текст кнопки при изменении полноэкранного состояния
-tg.onEvent('fullscreen', () => {
-    fullscreenButton.innerText = tg.isFullscreen ? 'Выйти из полноэкранного режима' : 'Включить полноэкранный режим';
-});
-
-
-
+    // Добавить обработчик нажатия на кнопку настроек
+    tg.SettingsButton.onClick(() => {
+        // Проверить текущий режим и переключить его
+        if (tg.isFullscreen) {
+            tg.exitFullscreen();  // Если уже полноэкранный, выключаем
+            console.log("Выключен полноэкранный режим.");
+        } else {
+            tg.requestFullscreen();  // Если не полноэкранный, включаем
+            console.log("Включен полноэкранный режим.");
+        }
+    });
 
     // Инициализация основного экрана и кнопки (по желанию)
     tg.MainButton.setParams({
