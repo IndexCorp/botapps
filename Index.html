@@ -45,6 +45,7 @@
             font-size: 30px;
             display: flex;
             align-items: center;
+            visibility: hidden; /* Изначально скрыто */
         }
 
         #score img {
@@ -62,48 +63,15 @@
         <span id="scoreText">0</span>
     </div>
 
-    <!-- Подключаем Telegram Web App API -->
-    <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
-
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         const startButton = document.getElementById("startButton");
         const scoreText = document.getElementById("scoreText");
+        const scoreContainer = document.getElementById("score");
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-
-        const tg = window.Telegram.WebApp;
-
-        // Растягиваем на весь экран при открытии
-        window.onload = () => {
-            tg.expand();  // Метод для автоматического растягивания
-        };
-
-        // Показать кнопку настроек
-        tg.SettingsButton.show();
-        // Добавить обработчик нажатия на кнопку настроек
-        tg.SettingsButton.onClick(() => {
-        // Проверить текущий режим и переключить его
-        if (tg.isFullscreen) {
-            tg.exitFullscreen();  // Если уже полноэкранный, выключаем
-            console.log("Выключен полноэкранный режим.");
-        } else {
-            tg.requestFullscreen();  // Если не полноэкранный, включаем
-            console.log("Включен полноэкранный режим.");
-        }
-    });
-
-        // Загружаем изображения
-        const spaceshipImg = new Image();
-        spaceshipImg.src = "spaceship.png";
-
-        const meteorImg = new Image();
-        meteorImg.src = "meteor.png";
-
-        const scoreIcon = new Image();
-        scoreIcon.src = "score-icon.png";
 
         // Космолет
         const spaceship = {
@@ -125,14 +93,6 @@
         const bullets = [];
         function shootBullet() {
             bullets.push({ x: spaceship.x + spaceship.width / 2, y: spaceship.y, radius: 3, speed: 5 });
-        }
-
-        // Управление через движение устройства
-        function setupDeviceMotion() {
-            window.addEventListener("deviceorientation", (event) => {
-                const tiltX = event.gamma || 0; 
-                spaceship.speedX = tiltX / 10;
-            });
         }
 
         // Фон - эффект падающих звезд
@@ -217,30 +177,13 @@
         }
 
         startButton.addEventListener("click", () => {
-            if (typeof DeviceOrientationEvent.requestPermission === "function") {
-                DeviceOrientationEvent.requestPermission()
-                    .then((response) => {
-                        if (response === "granted") {
-                            setupDeviceMotion();
-                        } else {
-                            alert("Доступ к датчикам отклонён.");
-                        }
-                    })
-                    .catch(() => alert("Ваш браузер не поддерживает DeviceOrientation API."));
-            } else {
-                setupDeviceMotion();
-            }
             startButton.style.display = "none";
+            scoreContainer.style.visibility = "visible"; // Показываем счет
             createStars();
             update();
         });
 
-        canvas.addEventListener("touchstart", function(event) {
-            event.preventDefault();
-            shootBullet();
-        });
-
-        canvas.addEventListener("click", function(event) {
+        canvas.addEventListener("click", function() {
             shootBullet();
         });
     </script>
