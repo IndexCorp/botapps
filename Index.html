@@ -3,21 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Космолет</title>
+    <title>Космическая игра</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="mobileOnlyMessage">
+    <div id="mobileWarning">
         <p>Эта игра доступна только на мобильных устройствах. Пожалуйста, откройте её на смартфоне.</p>
     </div>
-    <canvas id="gameCanvas" style="display: none;"></canvas>
-    <button id="startButton" style="display: none;">Начать игру</button>
-    <div id="score" style="display: none;">
-        <img src="score-icon.png" alt="Score Icon">
-        <span id="scoreText">0</span>
+    <canvas id="gameCanvas"></canvas>
+    <button id="startButton">Начать игру</button>
+    <div id="scoreDisplay">
+        <span>Очки: </span><span id="score">0</span>
     </div>
-
-    <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
     <script src="script.js"></script>
 </body>
 </html>
