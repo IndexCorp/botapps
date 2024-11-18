@@ -63,30 +63,8 @@
     </div>
 
     <script>
-        const tg = window.Telegram.WebApp;
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
-
-        // Растягиваем на весь экран при открытии
-        window.onload = () => {
-            tg.expand(); // Метод для автоматического растягивания
-        };
-
-        // Показать кнопку настроек
-        tg.SettingsButton.show();
-
-        // Добавить обработчик нажатия на кнопку настроек
-        tg.SettingsButton.onClick(() => {
-            if (tg.isFullscreen()) { // Проверка полноэкранного режима
-                // Выключаем полноэкранный режим с использованием postEvent
-                window.Telegram.WebView.postEvent("web_app_exit_fullscreen");
-                console.log("Выключен полноэкранный режим.");
-            } else {
-                // Включаем полноэкранный режим с использованием postEvent
-                window.Telegram.WebView.postEvent("web_app_request_fullscreen");
-                console.log("Включен полноэкранный режим.");
-            }
-        });
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -253,7 +231,14 @@
         });
 
         // Стрельба
-        window.addEventListener("click", shootBullet);
+        canvas.addEventListener("touchstart", function(event) {
+            event.preventDefault();
+            shootBullet();
+        });
+
+        canvas.addEventListener("click", function(event) {
+            shootBullet();
+        });
     </script>
 </body>
 </html>
