@@ -63,6 +63,20 @@
     </div>
 
     <script>
+        const tg = window.Telegram.WebApp;
+        tg.SettingsButton.show();
+        tg.SettingsButton.onClick(() => {
+        // Проверить текущий режим и переключить его
+        if (tg.isFullscreen) {
+            tg.exitFullscreen();  // Если уже полноэкранный, выключаем
+            console.log("Выключен полноэкранный режим.");
+        } else {
+            tg.requestFullscreen();  // Если не полноэкранный, включаем
+            console.log("Включен полноэкранный режим.");
+        }
+    });
+
+        
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
 
