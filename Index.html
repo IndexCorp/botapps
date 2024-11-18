@@ -44,19 +44,20 @@
 <script>
     let tg = window.Telegram.WebApp;
 
-    // Установить кнопку настроек
-    tg.web_app_setup_settings_button({ is_visible: true });
+    // Запрос на включение полноэкранного режима
+    tg.requestFullscreen();
 
-    tg.SettingsButton.onClick(() => {
-        if (tg.isFullscreen) {
-            tg.exitFullscreen(); // Выключаем полноэкранный режим
-            console.log("Выключен полноэкранный режим.");
-        } else {
-            tg.requestFullscreen(); // Включаем полноэкранный режим
-            console.log("Включен полноэкранный режим.");
-        }
-    });
+    // Запрос на выход из полноэкранного режима
+    tg.exitFullscreen();
+
+    // Проверка, в полноэкранном ли режиме
+    if (tg.isFullscreen) {
+        console.log("Мы в полноэкранном режиме!");
+    } else {
+        console.log("Мы не в полноэкранном режиме.");
+    }
 </script>
+
 
 
 </body>
