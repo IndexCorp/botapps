@@ -45,10 +45,10 @@
   const tg = window.Telegram.WebApp;
 
     // Показать кнопку настроек
-    tg.isFullscreen.show();
+    tg.SettingsButton.show();
 
     // Добавить обработчик нажатия на кнопку настроек
-    tg.isFullscreen.onClick(() => {
+    tg.SettingsButton.onClick(() => {
         // Проверить текущий режим и переключить его
         if (tg.isFullscreen) {
             tg.exitFullscreen();  // Если уже полноэкранный, выключаем
