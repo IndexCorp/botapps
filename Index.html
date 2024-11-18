@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,8 +14,8 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background-color: #000; /* Космический темный фон */
-            font-family: 'Monocraft', monospace; /* Применение шрифта */
+            background-color: #000;
+            font-family: 'Monocraft', monospace;
         }
 
         canvas {
@@ -34,7 +34,7 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            z-index: 10; /* Добавлен z-index, чтобы кнопка была поверх других элементов */
+            z-index: 10;
         }
 
         #score {
@@ -48,9 +48,9 @@
         }
 
         #score img {
-            width: 30px; /* Размер изображения, соответствующий шрифту */
+            width: 30px;
             height: 30px;
-            margin-right: 10px; /* Отступ между изображением и текстом */
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -61,10 +61,29 @@
         <img src="score-icon.png" alt="Score Icon">
         <span id="scoreText">0</span>
     </div>
-<script src="https://telegram.org/js/telegram-web-app.js?56"></script>
+
+    <!-- Подключаем Telegram Web App API -->
+    <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
+
     <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const startButton = document.getElementById("startButton");
+        const scoreText = document.getElementById("scoreText");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
         const tg = window.Telegram.WebApp;
+
+        // Растягиваем на весь экран при открытии
+        window.onload = () => {
+            tg.expand();  // Метод для автоматического растягивания
+        };
+
+        // Показать кнопку настроек
         tg.SettingsButton.show();
+        // Добавить обработчик нажатия на кнопку настроек
         tg.SettingsButton.onClick(() => {
         // Проверить текущий режим и переключить его
         if (tg.isFullscreen) {
@@ -76,31 +95,21 @@
         }
     });
 
-        
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
-
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const startButton = document.getElementById("startButton");
-        const scoreText = document.getElementById("scoreText");
-
         // Загружаем изображения
         const spaceshipImg = new Image();
-        spaceshipImg.src = "spaceship.png"; // Пиксельный космолет
+        spaceshipImg.src = "spaceship.png";
 
         const meteorImg = new Image();
-        meteorImg.src = "meteor.png"; // Пиксельный метеорит
+        meteorImg.src = "meteor.png";
 
         const scoreIcon = new Image();
-        scoreIcon.src = "score-icon.png"; // Иконка перед счетом
+        scoreIcon.src = "score-icon.png";
 
         // Космолет
         const spaceship = {
             x: canvas.width / 2,
             y: canvas.height - 100,
-            width: 50, // Размер космолета
+            width: 50,
             height: 50,
             speedX: 0
         };
@@ -121,27 +130,24 @@
         // Управление через движение устройства
         function setupDeviceMotion() {
             window.addEventListener("deviceorientation", (event) => {
-                const tiltX = event.gamma || 0; // Наклон по горизонтали
-                spaceship.speedX = tiltX / 10; // Устанавливаем скорость
+                const tiltX = event.gamma || 0; 
+                spaceship.speedX = tiltX / 10;
             });
         }
 
         // Фон - эффект падающих звезд
         let stars = [];
         function createStars() {
-            const numberOfStars = 80; // Количество звезд
-
+            const numberOfStars = 80;
             for (let i = 0; i < numberOfStars; i++) {
-                const size = Math.random() * 3 + 1; // Размер звезды
-                const x = Math.random() * canvas.width; // Позиция X
-                const y = Math.random() * canvas.height; // Позиция Y
-                const speed = Math.random() * 0.5 + 0.5; // Скорость падения
-
+                const size = Math.random() * 3 + 1;
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const speed = Math.random() * 0.5 + 0.5;
                 stars.push({ x, y, size, speed });
             }
         }
 
-        // Обновление звезд
         function updateStars() {
             stars.forEach(star => {
                 star.y += star.speed;
@@ -149,10 +155,9 @@
                     star.y = 0;
                     star.x = Math.random() * canvas.width;
                 }
-
                 ctx.beginPath();
                 ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                ctx.fillStyle = "white"; // Белые звезды
+                ctx.fillStyle = "white";
                 ctx.fill();
             });
         }
@@ -163,19 +168,12 @@
         // Основной игровой цикл
         function update() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Обновление и отрисовка фона (звезды)
             updateStars();
-
-            // Обновление позиции космолета
             spaceship.x += spaceship.speedX;
             if (spaceship.x < 0) spaceship.x = 0;
             if (spaceship.x > canvas.width - spaceship.width) spaceship.x = canvas.width - spaceship.width;
-
-            // Отрисовка космолета
             ctx.drawImage(spaceshipImg, spaceship.x, spaceship.y, spaceship.width, spaceship.height);
 
-            // Отрисовка метеоритов
             for (let i = comets.length - 1; i >= 0; i--) {
                 const comet = comets[i];
                 comet.y += comet.speed;
@@ -186,7 +184,6 @@
                 }
             }
 
-            // Обновление снарядов
             for (let i = bullets.length - 1; i >= 0; i--) {
                 const bullet = bullets[i];
                 bullet.y -= bullet.speed;
@@ -199,7 +196,6 @@
                     ctx.fill();
                     ctx.closePath();
 
-                    // Проверка столкновений с метеоритами
                     for (let j = comets.length - 1; j >= 0; j--) {
                         const comet = comets[j];
                         const dx = bullet.x - comet.x;
@@ -208,23 +204,19 @@
                         if (distance < bullet.radius + comet.radius) {
                             bullets.splice(i, 1);
                             comets.splice(j, 1);
-                            score++; // Увеличиваем счет
-                            scoreText.textContent = score; // Обновляем текст счета
+                            score++;
+                            scoreText.textContent = score;
                             break;
                         }
                     }
                 }
             }
 
-            // Создание новых метеоритов
             if (Math.random() < 0.02) createComet();
-
             requestAnimationFrame(update);
         }
 
-        // Запуск игры
         startButton.addEventListener("click", () => {
-            console.log("Кнопка нажата. Игра началась!");
             if (typeof DeviceOrientationEvent.requestPermission === "function") {
                 DeviceOrientationEvent.requestPermission()
                     .then((response) => {
@@ -236,15 +228,13 @@
                     })
                     .catch(() => alert("Ваш браузер не поддерживает DeviceOrientation API."));
             } else {
-                setupDeviceMotion(); // Для браузеров, которые не требуют разрешения
+                setupDeviceMotion();
             }
-
             startButton.style.display = "none";
             createStars();
             update();
         });
 
-        // Стрельба
         canvas.addEventListener("touchstart", function(event) {
             event.preventDefault();
             shootBullet();
