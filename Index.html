@@ -239,6 +239,27 @@
         canvas.addEventListener("click", function(event) {
             shootBullet();
         });
+
+        const tg = window.Telegram.WebApp;
+        // Растягиваем на весь экран при открытии
+        window.onload = () => {
+        tg.expand();  // Метод для автоматического растягивания
+        };
+
+        // Показать кнопку настроек
+    tg.SettingsButton.show();
+
+    // Добавить обработчик нажатия на кнопку настроек
+    tg.SettingsButton.onClick(() => {
+        // Проверить текущий режим и переключить его
+        if (tg.isFullscreen) {
+            tg.exitFullscreen();  // Если уже полноэкранный, выключаем
+            console.log("Выключен полноэкранный режим.");
+        } else {
+            tg.requestFullscreen();  // Если не полноэкранный, включаем
+            console.log("Включен полноэкранный режим.");
+        }
+    });
     </script>
 </body>
 </html>
