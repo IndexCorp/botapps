@@ -43,9 +43,8 @@
             left: 10px;
             color: white;
             font-size: 30px;
-            display: flex;
+            display: none; /* Скрываем до начала игры */
             align-items: center;
-            visibility: hidden; /* Скрываем изначально */
         }
 
         #score img {
@@ -96,26 +95,16 @@
             comets.push({ x, y: 0, radius: 20, speed: 2 + Math.random() * 3 });
         }
 
-        // Снаряды
-        const bullets = [];
-        function shootBullet() {
-            bullets.push({ x: spaceship.x + spaceship.width / 2, y: spaceship.y, radius: 3, speed: 5 });
-        }
-
-        // Счет
-        let score = 0;
-
         // Основной игровой цикл
         function update() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Движение космолета
             spaceship.x += spaceship.speedX;
             if (spaceship.x < 0) spaceship.x = 0;
             if (spaceship.x > canvas.width - spaceship.width) spaceship.x = canvas.width - spaceship.width;
+
             ctx.drawImage(spaceshipImg, spaceship.x, spaceship.y, spaceship.width, spaceship.height);
 
-            // Обновление метеоритов
             for (let i = comets.length - 1; i >= 0; i--) {
                 const comet = comets[i];
                 comet.y += comet.speed;
@@ -126,55 +115,14 @@
                 }
             }
 
-            // Обновление снарядов
-            for (let i = bullets.length - 1; i >= 0; i--) {
-                const bullet = bullets[i];
-                bullet.y -= bullet.speed;
-                if (bullet.y < 0) {
-                    bullets.splice(i, 1);
-                } else {
-                    ctx.beginPath();
-                    ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = "yellow";
-                    ctx.fill();
-                    ctx.closePath();
-
-                    // Проверка на столкновение
-                    for (let j = comets.length - 1; j >= 0; j--) {
-                        const comet = comets[j];
-                        const dx = bullet.x - comet.x;
-                        const dy = bullet.y - comet.y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-                        if (distance < bullet.radius + comet.radius) {
-                            bullets.splice(i, 1);
-                            comets.splice(j, 1);
-                            score++;
-                            scoreText.textContent = score;
-                            break;
-                        }
-                    }
-                }
-            }
-
             if (Math.random() < 0.02) createComet();
             requestAnimationFrame(update);
         }
 
-        // Обработчик кнопки "Начать игру"
         startButton.addEventListener("click", () => {
-            startButton.style.display = "none"; // Скрываем кнопку
-            scoreContainer.style.visibility = "visible"; // Показываем счет
-            update(); // Запускаем игровой цикл
-        });
-
-        // Управление мышью/пальцем
-        canvas.addEventListener("click", () => {
-            shootBullet();
-        });
-
-        canvas.addEventListener("touchstart", (event) => {
-            event.preventDefault();
-            shootBullet();
+            startButton.style.display = "none";
+            scoreContainer.style.display = "flex"; // Показываем счет при начале игры
+            update();
         });
     </script>
 </body>
