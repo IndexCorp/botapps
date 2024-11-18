@@ -78,10 +78,12 @@
         // Добавить обработчик нажатия на кнопку настроек
         tg.SettingsButton.onClick(() => {
             if (tg.isFullscreen()) { // Проверка полноэкранного режима
-                tg.exitFullscreen(); // Если уже полноэкранный, выключаем
+                // Выключаем полноэкранный режим с использованием postEvent
+                window.Telegram.WebView.postEvent("web_app_exit_fullscreen");
                 console.log("Выключен полноэкранный режим.");
             } else {
-                tg.requestFullscreen(); // Если не полноэкранный, включаем
+                // Включаем полноэкранный режим с использованием postEvent
+                window.Telegram.WebView.postEvent("web_app_request_fullscreen");
                 console.log("Включен полноэкранный режим.");
             }
         });
@@ -251,10 +253,7 @@
         });
 
         // Стрельба
-        canvas.addEventListener("touchstart", function(event) {
-            event.preventDefault();
-            shootBullet();
-        });
+        window.addEventListener("click", shootBullet);
     </script>
 </body>
 </html>
