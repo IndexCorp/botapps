@@ -42,25 +42,25 @@
 <!-- Подключаем Telegram Web App API -->
 <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
 <script>
-    const tg = window.Telegram.WebApp;
+   const tg = window.Telegram.WebApp;
 
-    // Функция для включения или выключения полноэкранного режима
-    function toggleFullscreen() {
-        if (tg.isFullscreen) {
-            tg.exitFullscreen(); // Выход из полноэкранного режима
-            console.log("Выключен полноэкранный режим.");
-        } else {
-            tg.requestFullscreen(); // Включение полноэкранного режима
-            console.log("Включен полноэкранный режим.");
-        }
+// Проверяем, если WebApp работает в полноэкранном режиме
+if (tg.isFullscreen) {
+    console.log('Приложение в полноэкранном режиме');
+} else {
+    console.log('Приложение не в полноэкранном режиме');
+}
+
+// При нажатии на кнопку настроек переключаем режим
+tg.SettingsButton.onClick(() => {
+    if (tg.isFullscreen) {
+        tg.exitFullscreen();  // Выход из полноэкранного режима
+        console.log('Выключен полноэкранный режим');
+    } else {
+        tg.requestFullscreen();  // Включение полноэкранного режима
+        console.log('Включен полноэкранный режим');
     }
-
-    // Настроим кнопку настроек для вызова toggleFullscreen
-    tg.web_app_setup_settings_button({
-        is_visible: true, // Сделать кнопку видимой
-    });
-
-    tg.SettingsButton.onClick(toggleFullscreen); // Привязка функции к кнопке
+});
 </script>
 
 
