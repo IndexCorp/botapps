@@ -1,27 +1,30 @@
-const tg = window.Telegram.WebApp;
-
-// Инициализация Telegram Web App
-tg.MainButton.setParams({
-    text: "Начать игру",
-    color: "#007BFF"
-});
-
-// Показать кнопку Telegram
-tg.MainButton.show();
-
-// Действие при нажатии на кнопку Telegram
-tg.MainButton.onClick(() => {
-    startGame();
-});
-
-// Установка размеров канваса
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+const startButton = document.getElementById("startButton");
+const scoreText = document.getElementById("scoreText");
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const scoreText = document.getElementById("scoreText");
+const tg = window.Telegram.WebApp;
+
+// Растягиваем на весь экран при открытии
+window.onload = () => {
+    tg.expand(); // Метод для автоматического растягивания
+};
+
+// Показать кнопку настроек
+tg.SettingsButton.show();
+// Добавить обработчик нажатия на кнопку настроек
+tg.SettingsButton.onClick(() => {
+    if (tg.isFullscreen) {
+        tg.exitFullscreen();
+        console.log("Выключен полноэкранный режим.");
+    } else {
+        tg.requestFullscreen();
+        console.log("Включен полноэкранный режим.");
+    }
+});
 
 // Загружаем изображения
 const spaceshipImg = new Image();
@@ -67,13 +70,11 @@ function setupDeviceMotion() {
 let stars = [];
 function createStars() {
     const numberOfStars = 80;
-
     for (let i = 0; i < numberOfStars; i++) {
         const size = Math.random() * 3 + 1;
         const x = Math.random() * canvas.width;
         const y = Math.random() * canvas.height;
         const speed = Math.random() * 0.5 + 0.5;
-
         stars.push({ x, y, size, speed });
     }
 }
@@ -85,7 +86,6 @@ function updateStars() {
             star.y = 0;
             star.x = Math.random() * canvas.width;
         }
-
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
         ctx.fillStyle = "white";
@@ -99,18 +99,12 @@ let score = 0;
 // Основной игровой цикл
 function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Обновление фона
     updateStars();
-
-    // Позиция космолета
     spaceship.x += spaceship.speedX;
     if (spaceship.x < 0) spaceship.x = 0;
     if (spaceship.x > canvas.width - spaceship.width) spaceship.x = canvas.width - spaceship.width;
-
     ctx.drawImage(spaceshipImg, spaceship.x, spaceship.y, spaceship.width, spaceship.height);
 
-    // Отрисовка метеоритов
     for (let i = comets.length - 1; i >= 0; i--) {
         const comet = comets[i];
         comet.y += comet.speed;
@@ -121,7 +115,6 @@ function update() {
         }
     }
 
-    // Обновление снарядов
     for (let i = bullets.length - 1; i >= 0; i--) {
         const bullet = bullets[i];
         bullet.y -= bullet.speed;
@@ -134,7 +127,6 @@ function update() {
             ctx.fill();
             ctx.closePath();
 
-            // Проверка столкновений с метеоритами
             for (let j = comets.length - 1; j >= 0; j--) {
                 const comet = comets[j];
                 const dx = bullet.x - comet.x;
@@ -151,13 +143,11 @@ function update() {
         }
     }
 
-    // Создание новых метеоритов
     if (Math.random() < 0.02) createComet();
-
     requestAnimationFrame(update);
 }
 
-function startGame() {
+startButton.addEventListener("click", () => {
     if (typeof DeviceOrientationEvent.requestPermission === "function") {
         DeviceOrientationEvent.requestPermission()
             .then((response) => {
@@ -169,13 +159,12 @@ function startGame() {
             })
             .catch(() => alert("Ваш браузер не поддерживает DeviceOrientation API."));
     } else {
-        setupDeviceMotion(); 
+        setupDeviceMotion();
     }
-
-    tg.MainButton.hide(); // Скрыть кнопку после начала игры
+    startButton.style.display = "none";
     createStars();
     update();
-}
+});
 
 canvas.addEventListener("touchstart", function(event) {
     event.preventDefault();
@@ -184,19 +173,4 @@ canvas.addEventListener("touchstart", function(event) {
 
 canvas.addEventListener("click", function(event) {
     shootBullet();
-});
-
-// Кнопка полноэкранного режима
-const fullscreenButton = document.getElementById("fullscreenButton");
-fullscreenButton.addEventListener("click", () => {
-    tg.WebApp.requestFullscreen(); // Запрос на полноэкранный режим
-});
-
-// Опционально, можно скрыть кнопку, если мы в полноэкранном режиме
-tg.WebApp.onEvent('fullscreen', () => {
-    fullscreenButton.style.display = 'none';  // Скрыть кнопку, если в полноэкранном режиме
-});
-
-tg.WebApp.onEvent('exitFullscreen', () => {
-    fullscreenButton.style.display = 'block'; // Показать кнопку, если не в полноэкранном режиме
 });
